@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build vs. Buy Decision Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface-2: #1c1c1c;
+    --border: #2a2a2a;
+    --border-active: #444;
+    --text-primary: #f0ede8;
+    --text-secondary: #888;
+    --text-muted: #555;
+    --accent-buy: #c8a96e;
+    --accent-platform: #7eb8a4;
+    --accent-build: #e07b5a;
+    --accent-buy-dim: rgba(200, 169, 110, 0.12);
+    --accent-platform-dim: rgba(126, 184, 164, 0.12);
+    --accent-build-dim: rgba(224, 123, 90, 0.12);
+    --track: #222;
+    --thumb: #555;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 48px 24px 80px;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  .header-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* FACTORS */
+  .factors {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 40px;
+  }
+
+  .factor {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    transition: border-color 0.2s;
+  }
+
+  .factor:hover {
+    border-color: var(--border-active);
+  }
+
+  .factor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+
+  .factor-label-group {
+    flex: 1;
+  }
+
+  .factor-index {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+  }
+
+  .factor-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .factor-description {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .factor-value-display {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .factor-score {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .factor-score-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* SLIDER */
+  .slider-wrap {
+    position: relative;
+    padding: 4px 0 20px;
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--track);
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--text-primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--border-active);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+    box-shadow: 0 0 0 1px var(--text-secondary);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--text-primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--border-active);
+  }
+
+  .slider-fill {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    height: 2px;
+    background: var(--text-secondary);
+    pointer-events: none;
+    transition: width 0.1s, background 0.3s;
+    z-index: 0;
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .slider-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* SPECTRUM BAR */
+  .spectrum-section {
+    margin-bottom: 40px;
+    position: sticky;
+    bottom: 24px;
+    z-index: 10;
+  }
+
+  .spectrum-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 28px 24px;
+    backdrop-filter: blur(10px);
+  }
+
+  .spectrum-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .spectrum-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .spectrum-score-raw {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .spectrum-track {
+    position: relative;
+    height: 8px;
+    border-radius: 2px;
+    background: linear-gradient(to right,
+      var(--accent-buy) 0%,
+      var(--accent-buy) 22%,
+      var(--accent-platform) 38%,
+      var(--accent-platform) 62%,
+      var(--accent-build) 78%,
+      var(--accent-build) 100%
+    );
+    margin-bottom: 12px;
+    opacity: 0.35;
+  }
+
+  .spectrum-needle {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 3px;
+    height: 22px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 8px rgba(240,237,232,0.4);
+  }
+
+  .spectrum-needle::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--text-primary);
+  }
+
+  .spectrum-zones {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .zone-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+    cursor: default;
+  }
+
+  .zone-label.active {
+    opacity: 1;
+  }
+
+  .zone-label.buy { color: var(--accent-buy); }
+  .zone-label.platform { color: var(--accent-platform); }
+  .zone-label.build { color: var(--accent-build); }
+
+  /* VERDICT */
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px 28px;
+    margin-bottom: 8px;
+    transition: border-color 0.4s, background 0.4s;
+  }
+
+  .verdict.verdict-buy {
+    border-color: rgba(200, 169, 110, 0.3);
+    background: var(--accent-buy-dim);
+  }
+
+  .verdict.verdict-platform {
+    border-color: rgba(126, 184, 164, 0.3);
+    background: var(--accent-platform-dim);
+  }
+
+  .verdict.verdict-build {
+    border-color: rgba(224, 123, 90, 0.3);
+    background: var(--accent-build-dim);
+  }
+
+  .verdict-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .verdict-eyebrow.buy { color: var(--accent-buy); }
+  .verdict-eyebrow.platform { color: var(--accent-platform); }
+  .verdict-eyebrow.build { color: var(--accent-build); }
+
+  .verdict-headline {
+    font-family: var(--serif);
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    color: var(--text-primary);
+  }
+
+  .verdict-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    max-width: 560px;
+  }
+
+  .verdict-body strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* FACTOR BREAKDOWN */
+  .breakdown {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-top: 2px;
+  }
+
+  .breakdown-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .breakdown-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .breakdown-row-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  .breakdown-bar-track {
+    flex: 1;
+    height: 2px;
+    background: var(--track);
+    border-radius: 1px;
+    position: relative;
+  }
+
+  .breakdown-bar-fill {
+    height: 100%;
+    border-radius: 1px;
+    background: var(--text-muted);
+    transition: width 0.4s ease, background 0.4s;
+    min-width: 2px;
+  }
+
+  .breakdown-row-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 24px;
+    text-align: right;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .footer-note a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 40px 0;
+  }
+
+  /* TOOLTIP on hover for factor labels */
+  .factor-tip {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--border-active);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 12px;
+    cursor: help;
+    margin-left: 6px;
+    vertical-align: middle;
+    position: relative;
+  }
+
+  /* Responsive */
+  @media (max-width: 560px) {
+    .factor { padding: 18px 16px; }
+    .breakdown-row-name { width: 140px; font-size: 11px; }
+    .verdict { padding: 24px 16px; }
+    .spectrum-card { padding: 20px 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">Numeric — AI Mandate Playbook</div>
+    <h1>Build vs. Buy<br><em>Decision Calculator</em></h1>
+    <p class="header-sub">Rate each factor for the process or tool you're evaluating. The calculator weights your inputs and returns a recommendation — Buy, Build on a Platform, or Build.</p>
+  </header>
+
+  <div class="factors" id="factors-container"></div>
+
+  <div class="section-divider"></div>
+
+  <!-- SPECTRUM -->
+  <div class="spectrum-section">
+    <div class="spectrum-card">
+      <div class="spectrum-header">
+        <span class="spectrum-title">Recommendation Spectrum</span>
+        <span class="spectrum-score-raw" id="raw-score-display">score: —</span>
+      </div>
+      <div class="spectrum-track">
+        <div class="spectrum-needle" id="spectrum-needle"></div>
+      </div>
+      <div class="spectrum-zones">
+        <span class="zone-label buy" id="zone-buy">Buy</span>
+        <span class="zone-label platform" id="zone-platform">Build on a Platform</span>
+        <span class="zone-label build" id="zone-build">Build</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict" id="verdict-card">
+    <div class="verdict-eyebrow" id="verdict-eyebrow"></div>
+    <div class="verdict-headline" id="verdict-headline">Adjust the sliders to see your recommendation.</div>
+    <div class="verdict-body" id="verdict-body"></div>
+  </div>
+
+  <!-- BREAKDOWN -->
+  <div class="breakdown">
+    <div class="breakdown-title">Factor Breakdown</div>
+    <div class="breakdown-rows" id="breakdown-rows"></div>
+  </div>
+
+  <div class="footer-note">
+    Framework based on interviews with Ben Sheridan, Alec, Adam (Numeric), and Drew Armanino &amp; Dean Quiambao (Armanino). 
+    For context, read <em>The Accountant's Dilemma</em> — the full article on Build vs. Buy in the age of AI.
+  </div>
+
+</div>
+
+<script>
+const FACTORS = [
+  {
+    id: 'uniqueness',
+    index: '01',
+    name: 'Uniqueness of Your Data or Process',
+    description: 'How specific is this to your business? Generic processes (commissions, payroll) exist everywhere. Proprietary workflows tied to your data model are rare.',
+    lowLabel: 'Generic — any company has this',
+    highLabel: 'Completely unique to us',
+    weight: 0.25,
+    direction: 'build', // high score = build
+  },
+  {
+    id: 'maintenance',
+    index: '02',
+    name: 'Maintenance Capacity',
+    description: 'Do you have someone who wants to own this long-term? The right question isn\'t "can we build it" — it\'s "who maintains it in a year?"',
+    lowLabel: 'No clear owner',
+    highLabel: 'Dedicated internal owner',
+    weight: 0.20,
+    direction: 'build',
+  },
+  {
+    id: 'defensibility',
+    index: '03',
+    name: 'Defensibility Stakes',
+    description: 'Does this output appear in your financials or audit trail? Will auditors scrutinize it? The higher the stakes, the stronger the case for professional accountability.',
+    lowLabel: 'Internal use, low stakes',
+    highLabel: 'Audited, board-visible',
+    weight: 0.25,
+    direction: 'buy', // high score = buy
+  },
+  {
+    id: 'vendor_viability',
+    index: '04',
+    name: 'Vendor Viability',
+    description: 'Is there a well-funded, roadmap-aligned vendor solving this problem? "Everything demos well" — so evaluate funding structure, not just features.',
+    lowLabel: 'No credible vendor exists',
+    highLabel: 'Strong, established vendor',
+    weight: 0.15,
+    direction: 'buy',
+  },
+  {
+    id: 'failure_cost',
+    index: '05',
+    name: 'Cost of Failure',
+    description: 'What happens if this breaks during close? Contained blast radius (internal process pain) vs. catastrophic (financial misstatement, regulatory risk, board exposure).',
+    lowLabel: 'Contained — easily recoverable',
+    highLabel: 'Catastrophic — legal / regulatory',
+    weight: 0.15,
+    direction: 'buy',
+  },
+];
+
+let values = {};
+FACTORS.forEach(f => { values[f.id] = 5; });
+
+function computeScore() {
+  // Score 0–10 where 0 = strong Buy, 10 = strong Build
+  // "build" direction factors: higher slider → higher build score
+  // "buy" direction factors: higher slider → lower build score (more Buy)
+
+  let weightedSum = 0;
+  let totalWeight = 0;
+
+  FACTORS.forEach(f => {
+    const v = values[f.id]; // 1–10
+    const normalized = (v - 1) / 9; // 0–1
+    const contribution = f.direction === 'build' ? normalized : (1 - normalized);
+    weightedSum += contribution * f.weight;
+    totalWeight += f.weight;
+  });
+
+  return (weightedSum / totalWeight) * 10; // 0–10
+}
+
+function getVerdict(score) {
+  if (score < 3.5) {
+    return {
+      zone: 'buy',
+      eyebrow: 'Recommendation → Buy',
+      headline: 'Buy a proven solution — don\'t build this.',
+      body: `The factors here point clearly toward a vendor purchase. <strong>The defensibility stakes are high</strong>, the failure cost is significant, or a strong vendor already exists. You're not just buying features — you're buying a vendor to call when something breaks at 11pm before a board presentation. <strong>Ask hard questions in the demo.</strong> Everything demos well; pressure-test on real data, verify funding structure, and confirm iterative delivery timelines. A SaaS contract, in this context, is closer to an insurance scheme than a software purchase.`
+    };
+  } else if (score < 6.5) {
+    return {
+      zone: 'platform',
+      eyebrow: 'Recommendation → Build on a Platform',
+      headline: 'Build inside a platform — not from scratch.',
+      body: `This sits in productive middle ground. <strong>You have customization needs</strong>, but the infrastructure burden of a ground-up build would be costly to maintain. The right move: find a platform that provides clean, auditable data as a foundation, and assemble custom workflows on top. <strong>Before you open a new tab and start building</strong>, check your vendor's roadmap — the thing you're about to build may already be six weeks from shipping. And ask yourself honestly: who maintains the custom layer in a year?`
+    };
+  } else {
+    return {
+      zone: 'build',
+      eyebrow: 'Recommendation → Build',
+      headline: 'Build it — this is genuinely yours to own.',
+      body: `Your process is specific enough, your stakes are contained enough, and you have someone ready to own it. <strong>AI tools have compressed build cycles</strong> from months to weeks — full enterprise solutions with cloud hosting, logging, and security. But feasibility is not the right axis. The question that matters: <strong>is the scope narrow, and is there a named person who wants to maintain this in a year?</strong> If yes on both — build. And before you start, check what your existing vendors have on their roadmap. No point building something that ships in two months.`
+    };
+  }
+}
+
+function render() {
+  const score = computeScore();
+  const verdict = getVerdict(score);
+
+  // Needle position: score 0 = left (Buy), score 10 = right (Build)
+  const pct = (score / 10) * 100;
+  document.getElementById('spectrum-needle').style.left = `${Math.max(1, Math.min(99, pct))}%`;
+  document.getElementById('raw-score-display').textContent = `score: ${score.toFixed(1)} / 10`;
+
+  // Zone labels
+  document.getElementById('zone-buy').classList.toggle('active', verdict.zone === 'buy');
+  document.getElementById('zone-platform').classList.toggle('active', verdict.zone === 'platform');
+  document.getElementById('zone-build').classList.toggle('active', verdict.zone === 'build');
+
+  // Verdict card
+  const card = document.getElementById('verdict-card');
+  card.className = `verdict verdict-${verdict.zone}`;
+  const ey = document.getElementById('verdict-eyebrow');
+  ey.className = `verdict-eyebrow ${verdict.zone}`;
+  ey.textContent = verdict.eyebrow;
+  document.getElementById('verdict-headline').textContent = verdict.headline;
+  document.getElementById('verdict-body').innerHTML = verdict.body;
+
+  // Breakdown bars
+  const breakdownEl = document.getElementById('breakdown-rows');
+  breakdownEl.innerHTML = '';
+  FACTORS.forEach(f => {
+    const v = values[f.id];
+    const normalized = (v - 1) / 9;
+    const buildContrib = f.direction === 'build' ? normalized : (1 - normalized);
+    const pctBar = buildContrib * 100;
+
+    let barColor;
+    if (buildContrib < 0.35) barColor = 'var(--accent-buy)';
+    else if (buildContrib < 0.65) barColor = 'var(--accent-platform)';
+    else barColor = 'var(--accent-build)';
+
+    const row = document.createElement('div');
+    row.className = 'breakdown-row';
+    row.innerHTML = `
+      <div class="breakdown-row-name">${f.name.split(' ').slice(0,3).join(' ')}</div>
+      <div class="breakdown-bar-track">
+        <div class="breakdown-bar-fill" style="width: ${pctBar}%; background: ${barColor};"></div>
+      </div>
+      <div class="breakdown-row-val">${v}</div>
+    `;
+    breakdownEl.appendChild(row);
+  });
+
+  // Update slider fills
+  FACTORS.forEach(f => {
+    const fill = document.getElementById(`fill-${f.id}`);
+    const slider = document.getElementById(`slider-${f.id}`);
+    if (fill && slider) {
+      const pctFill = ((values[f.id] - 1) / 9) * 100;
+      fill.style.width = `calc(${pctFill}% - 8px)`;
+
+      // Color the fill based on factor direction and value
+      const normalized = (values[f.id] - 1) / 9;
+      const buildScore = f.direction === 'build' ? normalized : (1 - normalized);
+      if (buildScore < 0.35) fill.style.background = 'var(--accent-buy)';
+      else if (buildScore < 0.65) fill.style.background = 'var(--accent-platform)';
+      else fill.style.background = 'var(--accent-build)';
+
+      // Score display
+      const scoreEl = document.getElementById(`score-${f.id}`);
+      if (scoreEl) scoreEl.textContent = values[f.id];
+    }
+  });
+}
+
+function buildFactors() {
+  const container = document.getElementById('factors-container');
+
+  FACTORS.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'factor';
+    el.innerHTML = `
+      <div class="factor-header">
+        <div class="factor-label-group">
+          <div class="factor-index">${f.index} / ${FACTORS.length.toString().padStart(2, '0')}</div>
+          <div class="factor-name">${f.name}</div>
+          <div class="factor-description">${f.description}</div>
+        </div>
+        <div class="factor-value-display">
+          <div class="factor-score" id="score-${f.id}">${values[f.id]}</div>
+          <div class="factor-score-label">/ 10</div>
+        </div>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-fill" id="fill-${f.id}"></div>
+        <input
+          type="range"
+          class="slider"
+          id="slider-${f.id}"
+          min="1" max="10" step="1"
+          value="${values[f.id]}"
+        >
+        <div class="slider-labels">
+          <span class="slider-label">${f.lowLabel}</span>
+          <span class="slider-label">${f.highLabel}</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+
+    const slider = el.querySelector('.slider');
+    slider.addEventListener('input', (e) => {
+      values[f.id] = parseInt(e.target.value);
+      render();
+    });
+  });
+}
+
+buildFactors();
+render();
+</script>
+</body>
+</html>
