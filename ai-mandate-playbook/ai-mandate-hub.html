@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Mandate Playbook — Numeric</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f0e;
+    --surface: #141716;
+    --surface2: #1c1f1d;
+    --border: #2a2e2c;
+    --accent: #b8f060;
+    --accent-dim: #7aab2a;
+    --text: #e8ede9;
+    --text-mid: #8a9489;
+    --text-dim: #4a5249;
+    --phase1: #60a8f0;
+    --phase2: #f0c060;
+    --phase3: #f07860;
+    --phase4: #b060f0;
+    --phase5: #60f0b8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,15,14,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .phase-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px 6px 10px;
+    font-size: 12px;
+    color: var(--text-mid);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .phase-pill-dot {
+    width: 6px; height: 6px;
+    background: var(--phase1);
+    border-radius: 50%;
+  }
+
+  .btn-ghost {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.05;
+    color: var(--text);
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-primary {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: #0d0f0e;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: #c8ff70; transform: translateY(-1px); }
+
+  .hero-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── JOURNEY MAP ── */
+  .journey-section {
+    padding: 0 40px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .journey-map {
+    position: relative;
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  /* Connector line */
+  .journey-map::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 36px;
+    right: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--phase1), var(--phase2), var(--phase3), var(--phase4), var(--phase5));
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .phase-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin: 0 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .phase-card:first-child { margin-left: 0; }
+  .phase-card:last-child { margin-right: 0; }
+
+  .phase-card.active {
+    border-color: var(--phase-color);
+    background: var(--surface2);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--phase-color);
+  }
+
+  .phase-card:hover:not(.active) {
+    border-color: var(--border);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+
+  .phase-card[data-phase="1"] { --phase-color: var(--phase1); }
+  .phase-card[data-phase="2"] { --phase-color: var(--phase2); }
+  .phase-card[data-phase="3"] { --phase-color: var(--phase3); }
+  .phase-card[data-phase="4"] { --phase-color: var(--phase4); }
+  .phase-card[data-phase="5"] { --phase-color: var(--phase5); }
+
+  .phase-number {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--phase-color);
+    color: var(--phase-color);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: all 0.25s;
+  }
+
+  .phase-card.active .phase-number {
+    background: var(--phase-color);
+    color: var(--bg);
+  }
+
+  .phase-card.you-are-here .phase-number::after {
+    content: '';
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    top: -2px; right: -2px;
+  }
+
+  .phase-card.you-are-here .phase-number {
+    position: relative;
+  }
+
+  .phase-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .phase-tagline {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .phase-you-are-here {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(184,240,96,0.1);
+    border: 1px solid rgba(184,240,96,0.2);
+    border-radius: 4px;
+    padding: 3px 7px;
+  }
+
+  /* ── PHASE DETAIL ── */
+  .phase-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    display: none;
+  }
+
+  .phase-detail.visible { display: block; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .detail-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .detail-col-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .detail-col h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .detail-col p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .action-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  .action-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--phase-color);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .asset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .asset-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .asset-item:hover {
+    border-color: var(--phase-color);
+    transform: translateX(2px);
+  }
+
+  .asset-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .asset-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .asset-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .asset-type {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .asset-arrow {
+    color: var(--text-dim);
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+
+  .asset-item:hover .asset-arrow { transform: translateX(3px); color: var(--text-mid); }
+
+  .resource-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .resource-item:last-child { border-bottom: none; }
+  .resource-item:hover .resource-title { color: var(--accent); }
+
+  .resource-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 7px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .resource-title {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .resource-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  /* ── GLOBAL LIBRARY ── */
+  .library-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  .library-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .library-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .library-card:hover {
+    border-color: var(--text-dim);
+    transform: translateY(-2px);
+  }
+
+  .library-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .library-phase-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  .library-card-icon {
+    font-size: 18px;
+  }
+
+  .library-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .library-card-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero { animation: fadeUp 0.6s ease both; }
+  .journey-section { animation: fadeUp 0.6s 0.1s ease both; }
+  .phase-detail { animation: fadeUp 0.35s ease both; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Numeric · AI Mandate Playbook
+  </div>
+  <div class="header-right">
+    <div class="phase-pill">
+      <div class="phase-pill-dot"></div>
+      Your starting point: Phase 1
+    </div>
+    <button class="btn-ghost" onclick="scrollToLibrary()">Full Library</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">The AI Mandate Playbook</div>
+  <h1 class="hero-title">AI mandate expectations: high.<br><em>Margin for error: zero.</em></h1>
+  <p class="hero-sub">Answer five questions and get a clear starting point for your mandate. Or explore the full playbook — every resource is available to you, wherever you are in the journey.</p>
+  <div class="hero-cta-row">
+    <button class="btn-primary">Take the diagnostic →</button>
+    <span class="hero-note">5 questions · 2 minutes</span>
+  </div>
+</section>
+
+<!-- JOURNEY MAP -->
+<section class="journey-section">
+  <div class="section-label">Your implementation journey</div>
+  <div class="journey-map">
+
+    <div class="phase-card you-are-here active" data-phase="1" onclick="selectPhase(1)">
+      <div class="phase-number">01</div>
+      <div class="phase-name">Get the data right</div>
+      <div class="phase-tagline">Clean, accessible, API-ready</div>
+      <div class="phase-you-are-here">Your start</div>
+    </div>
+
+    <div class="phase-card" data-phase="2" onclick="selectPhase(2)">
+      <div class="phase-number">02</div>
+      <div class="phase-name">Calibrate your risk</div>
+      <div class="phase-tagline">Match AI to your complexity</div>
+    </div>
+
+    <div class="phase-card" data-phase="3" onclick="selectPhase(3)">
+      <div class="phase-number">03</div>
+      <div class="phase-name">Get real proof</div>
+      <div class="phase-tagline">Beyond demos and billboards</div>
+    </div>
+
+    <div class="phase-card" data-phase="4" onclick="selectPhase(4)">
+      <div class="phase-number">04</div>
+      <div class="phase-name">Experiment widely</div>
+      <div class="phase-tagline">In the sandbox, not the GL</div>
+    </div>
+
+    <div class="phase-card" data-phase="5" onclick="selectPhase(5)">
+      <div class="phase-number">05</div>
+      <div class="phase-name">Implement carefully</div>
+      <div class="phase-tagline">Deploy with discipline</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHASE DETAIL -->
+<section class="phase-detail visible" id="phase-detail">
+  <div id="detail-content"></div>
+</section>
+
+<!-- LIBRARY -->
+<section class="library-section" id="library">
+  <div class="section-label">Full resource library</div>
+  <div class="library-grid" id="library-grid"></div>
+</section>
+
+<script>
+const phases = {
+  1: {
+    color: '#60a8f0',
+    name: 'Get the data right',
+    description: 'Before any AI implementation can succeed, your data needs to be accessible, clean, and consistently defined. Most teams discover during this phase that their data isn\'t as ready as they assumed — and that the work of fixing it is unglamorous but foundational to everything that follows.',
+    actions: [
+      'Audit data accessibility: can systems expose data via API, or only CSV export?',
+      'Establish single sources of truth — one definition of "active customer," "open invoice," "reconciled balance"',
+      'Document your chart of accounts logic so any system can interpret transactions consistently'
+    ],
+    assets: [
+      { icon: '✓', name: 'Data Readiness Checklist', type: 'Template' },
+      { icon: '⬡', name: 'SOP Documentation Starter', type: 'Template' },
+      { icon: '◈', name: 'Chart of Accounts Audit Guide', type: 'Guide' }
+    ],
+    resources: [
+      { source: 'David Fuhriman', title: 'Infinite Work: Why Most Organizations Fail at AI Adoption', desc: 'The foundational case for why infrastructure precedes tooling — and what "data readiness" actually means in practice.' },
+      { source: 'CrossCountry', title: 'Value → Foundation → Design → Build', desc: 'Tom and Cindy\'s sequencing model for AI transformation that starts with clean foundations, not shiny tools.' },
+      { source: 'AICPA', title: 'Data Integrity in AI-Assisted Accounting', desc: 'Standards guidance on what auditable data quality looks like in practice.' }
+    ]
+  },
+  2: {
+    color: '#f0c060',
+    name: 'Calibrate your risk',
+    description: 'Not all accounting processes carry the same risk profile. Phase 2 is about honestly mapping which parts of your operation can tolerate experimentation and which require near-zero error tolerance — before you commit to any implementation path.',
+    actions: [
+      'Map processes against three criteria: auditability, observability, and repeatability',
+      'Identify which workflows touch external reporting vs. internal analysis only',
+      'Build a cross-functional steering committee before any tooling decisions'
+    ],
+    assets: [
+      { icon: '⊙', name: 'Risk Calibration Matrix', type: 'Template' },
+      { icon: '◫', name: 'Steering Committee Setup Guide', type: 'Guide' },
+      { icon: '▦', name: 'Build vs. Buy Decision Framework', type: 'Tool' }
+    ],
+    resources: [
+      { source: 'CrossCountry', title: 'The Three Non-Negotiables: Auditability, Observability, Repeatability', desc: 'Tom\'s framework for evaluating any AI implementation against compliance requirements.' },
+      { source: 'David Fuhriman', title: 'Governance: Moving Fast Without Breaking Things', desc: 'How to set clear AI guardrails that enable confidence rather than creating bureaucracy.' },
+      { source: 'Big 4 Research', title: 'AI Risk Frameworks for Finance Functions', desc: 'Industry-standard approaches to categorizing automation risk in regulated environments.' }
+    ]
+  },
+  3: {
+    color: '#f07860',
+    name: 'Get real proof',
+    description: 'This is the phase most teams skip — they move from pilot to production before establishing genuine benchmarks. Proof means having before/after data that holds up to scrutiny, not just a successful demo or a vendor case study.',
+    actions: [
+      'Establish baseline metrics before any implementation: close cycle time, error rate, hours per reconciliation',
+      'Run parallel workflows — AI-assisted alongside existing — before deprecating the old process',
+      'Document the criteria you\'ll use to declare the pilot successful'
+    ],
+    assets: [
+      { icon: '◉', name: 'Pilot Scorecard Template', type: 'Template' },
+      { icon: '▣', name: 'Baseline Metrics Worksheet', type: 'Template' },
+      { icon: '◈', name: 'CFO Defense Deck', type: 'Deck' }
+    ],
+    resources: [
+      { source: 'Abridge', title: 'What "Proof" Actually Looks Like in Production', desc: 'Francisco and Kenny on what separates real implementation evidence from impressive demos.' },
+      { source: 'Harvard Business Review', title: 'Why AI Pilots Fail to Scale', desc: 'The organizational patterns that prevent successful pilots from becoming real programs.' },
+      { source: 'Numeric', title: 'Month-End Close Maturity Model', desc: 'A benchmark framework for evaluating your current close process against industry standards.' }
+    ]
+  },
+  4: {
+    color: '#b060f0',
+    name: 'Experiment widely',
+    description: 'With clean data, calibrated risk, and genuine proof points in hand, you\'re ready to move fast — but only in the right environment. Phase 4 is about maximizing what you learn before anything touches your general ledger.',
+    actions: [
+      'Stand up a dedicated sandbox environment disconnected from production data',
+      'Run an accounting hackathon: structured time-boxed experiments across the team',
+      'Evaluate the "build vs. buy vs. vibe-code" decision for each workflow you\'re testing'
+    ],
+    assets: [
+      { icon: '◎', name: 'Accounting Hackathon Scheduler', type: 'Tool' },
+      { icon: '⬡', name: 'AI Tools Directory', type: 'Directory' },
+      { icon: '◈', name: '"Should I Vibe Code This?" Calculator', type: 'Tool' }
+    ],
+    resources: [
+      { source: 'Abridge', title: 'The Accounting Engineer: A New Kind of Finance Role', desc: 'Kenny Kha on how the gap between engineering and accounting is compressing — and what that means for your team.' },
+      { source: 'Francisco Meyo', title: 'We\'re Not in the Business of Building Software', desc: 'A sharp framework for when to build and when to buy, grounded in what finance teams are actually for.' },
+      { source: 'a16z', title: 'The Build vs. Buy Decision in the Age of AI Agents', desc: 'How the calculus has shifted as foundation models lower the cost of custom development.' }
+    ]
+  },
+  5: {
+    color: '#60f0b8',
+    name: 'Implement carefully',
+    description: 'Production implementation in the GL is a different discipline than experimentation. Phase 5 is about moving from sandbox to real workflows with the rigor those workflows require — rollout plans, fallback procedures, and ongoing monitoring.',
+    actions: [
+      'Define rollback criteria before go-live: under what conditions do you revert?',
+      'Build ongoing monitoring into the workflow — not a one-time audit, a continuous check',
+      'Create the internal communication plan so your team understands what changed and why'
+    ],
+    assets: [
+      { icon: '◫', name: 'Go-Live Readiness Checklist', type: 'Template' },
+      { icon: '▦', name: '"Infinite Work" Mapping Worksheet', type: 'Template' },
+      { icon: '◉', name: 'Team Change Communication Template', type: 'Template' }
+    ],
+    resources: [
+      { source: 'David Fuhriman', title: 'Human Capital: People Don\'t Resist Technology, They Resist Identity Change', desc: 'The most important thing a Controller needs to read before rolling out AI to their team.' },
+      { source: 'CrossCountry', title: 'From Agent Sprawl to Agent Governance', desc: 'Cindy on what happens when you don\'t manage the transition from experimentation to production.' },
+      { source: 'McKinsey', title: 'Change Management in Finance Transformation', desc: 'A research-backed framework for managing the human side of process change.' }
+    ]
+  }
+};
+
+const allAssets = [
+  { phase: 1, color: '#60a8f0', icon: '✓', name: 'Data Readiness Checklist', type: 'Template', desc: 'Sequential checklist for evaluating AI-readiness of your financial data' },
+  { phase: 1, color: '#60a8f0', icon: '⬡', name: 'SOP Documentation Starter', type: 'Template', desc: 'Template for documenting finance workflows before automation' },
+  { phase: 2, color: '#f0c060', icon: '⊙', name: 'Risk Calibration Matrix', type: 'Template', desc: 'Map your processes against auditability, observability, repeatability' },
+  { phase: 2, color: '#f0c060', icon: '◫', name: 'Steering Committee Guide', type: 'Guide', desc: 'How to structure cross-functional AI governance in a finance org' },
+  { phase: 2, color: '#f0c060', icon: '▦', name: 'Build vs. Buy Framework', type: 'Tool', desc: 'Decision criteria for evaluating custom vs. vendor AI solutions' },
+  { phase: 3, color: '#f07860', icon: '◈', name: 'CFO Defense Deck', type: 'Deck', desc: 'Template for building the internal case for your AI mandate' },
+  { phase: 3, color: '#f07860', icon: '◉', name: 'Pilot Scorecard', type: 'Template', desc: 'Establish and track the metrics that prove your pilot actually worked' },
+  { phase: 4, color: '#b060f0', icon: '◎', name: 'Hackathon Scheduler', type: 'Tool', desc: 'Format and agenda for running a structured accounting AI hackathon' },
+  { phase: 4, color: '#b060f0', icon: '⬡', name: 'AI Tools Directory', type: 'Directory', desc: 'Curated partner tools with accounting-specific notes on where they thrive' },
+  { phase: 4, color: '#b060f0', icon: '◈', name: 'Vibe Code Calculator', type: 'Tool', desc: 'Should you build this yourself? Input your situation, get a recommendation' },
+  { phase: 5, color: '#60f0b8', icon: '◫', name: 'Go-Live Checklist', type: 'Template', desc: 'Readiness criteria before any AI workflow touches your general ledger' },
+  { phase: 5, color: '#60f0b8', icon: '▦', name: 'Infinite Work Worksheet', type: 'Template', desc: 'Map what your team isn\'t doing now that AI capacity could unlock' },
+];
+
+let activePhase = 1;
+
+function selectPhase(n) {
+  activePhase = n;
+
+  // Update cards
+  document.querySelectorAll('.phase-card').forEach(c => {
+    c.classList.remove('active');
+    if (parseInt(c.dataset.phase) === n) c.classList.add('active');
+  });
+
+  // Render detail
+  const p = phases[n];
+  const detail = document.getElementById('detail-content');
+  detail.innerHTML = `
+    <div class="section-label" style="margin-bottom:24px;">Phase 0${n} — ${p.name}</div>
+    <div class="detail-grid">
+      <div class="detail-col" style="--phase-color: ${p.color}">
+        <div class="detail-col-label">Where you are</div>
+        <h3>What this phase looks like</h3>
+        <p>${p.description}</p>
+        <div class="detail-col-label" style="margin-top:24px; margin-bottom:12px;">Prioritized actions</div>
+        <ul class="action-list">
+          ${p.actions.map(a => `
+            <li class="action-item">
+              <div class="action-dot"></div>
+              ${a}
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+      <div class="detail-col" style="--phase-color: ${p.color}">
+        <div class="detail-col-label">Tools & templates</div>
+        <div class="asset-list">
+          ${p.assets.map(a => `
+            <a class="asset-item" href="#" style="--phase-color: ${p.color}">
+              <div class="asset-left">
+                <div class="asset-icon">${a.icon}</div>
+                <div>
+                  <div class="asset-name">${a.name}</div>
+                  <div class="asset-type">${a.type}</div>
+                </div>
+              </div>
+              <div class="asset-arrow">→</div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+      <div class="detail-col" style="--phase-color: ${p.color}">
+        <div class="detail-col-label">External resources</div>
+        <div>
+          ${p.resources.map(r => `
+            <div class="resource-item">
+              <div class="resource-source">${r.source}</div>
+              <div>
+                <div class="resource-title">${r.title}</div>
+                <div class="resource-desc">${r.desc}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('phase-detail').classList.add('visible');
+}
+
+function renderLibrary() {
+  const grid = document.getElementById('library-grid');
+  grid.innerHTML = allAssets.map(a => `
+    <div class="library-card">
+      <div class="library-card-top">
+        <span class="library-phase-tag" style="color:${a.color}; border-color:${a.color}30; background:${a.color}10;">Phase 0${a.phase}</span>
+        <span class="library-card-icon">${a.icon}</span>
+      </div>
+      <div class="library-card-name">${a.name}</div>
+      <div class="library-card-desc">${a.desc}</div>
+    </div>
+  `).join('');
+}
+
+function scrollToLibrary() {
+  document.getElementById('library').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Init
+selectPhase(1);
+renderLibrary();
+</script>
+</body>
+</html>

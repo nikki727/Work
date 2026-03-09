@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Mandate Playbook — Numeric</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f0e; --surface: #141716; --surface2: #1c1f1d; --surface3: #222624;
+    --border: #2a2e2c; --border2: #343936;
+    --accent: #b8f060; --accent-dim: #7aab2a;
+    --text: #e8ede9; --text-mid: #8a9489; --text-dim: #4a5249;
+    --phase1: #60a8f0; --phase2: #f0c060; --phase3: #f07860; --phase4: #b060f0; --phase5: #60f0b8;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 100; opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 40px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(13,15,14,0.94);
+    backdrop-filter: blur(14px); z-index: 50;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); }
+  .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .phase-pill { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px 6px 10px; font-size: 12px; color: var(--text-mid); font-family: 'DM Mono', monospace; }
+  .phase-pill-dot { width: 6px; height: 6px; background: var(--phase1); border-radius: 50%; }
+  .btn-ghost { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-mid); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 8px 16px; cursor: pointer; transition: all 0.2s; }
+  .btn-ghost:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* HERO */
+  .hero { padding: 80px 40px 60px; max-width: 1200px; margin: 0 auto; animation: fadeUp 0.6s ease both; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 20px; }
+  .hero-title { font-family: 'Instrument Serif', serif; font-size: clamp(40px, 5.5vw, 68px); line-height: 1.06; color: var(--text); max-width: 680px; margin-bottom: 24px; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 16px; color: var(--text-mid); max-width: 500px; line-height: 1.65; margin-bottom: 40px; }
+  .hero-cta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn-primary { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent); color: #0d0f0e; border: none; border-radius: 6px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; }
+  .btn-primary:hover { background: #c8ff70; transform: translateY(-1px); }
+  .btn-manifesto { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-mid); background: none; border: 1px solid var(--border2); border-radius: 6px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; }
+  .btn-manifesto:hover { color: var(--text); border-color: var(--text-dim); }
+  .hero-note { font-size: 12px; color: var(--text-dim); font-family: 'DM Mono', monospace; }
+
+  /* JOURNEY MAP */
+  .journey-section { padding: 0 40px 40px; max-width: 1200px; margin: 0 auto; animation: fadeUp 0.6s 0.1s ease both; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .journey-map { position: relative; display: flex; gap: 0; align-items: stretch; }
+  .journey-map::before { content: ''; position: absolute; top: 36px; left: 36px; right: 36px; height: 1px; background: linear-gradient(90deg, var(--phase1), var(--phase2), var(--phase3), var(--phase4), var(--phase5)); opacity: 0.25; z-index: 0; }
+  .phase-card { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 20px; margin: 0 5px; cursor: pointer; transition: all 0.25s ease; position: relative; z-index: 1; }
+  .phase-card:first-child { margin-left: 0; }
+  .phase-card:last-child { margin-right: 0; }
+  .phase-card[data-phase="1"] { --phase-color: var(--phase1); }
+  .phase-card[data-phase="2"] { --phase-color: var(--phase2); }
+  .phase-card[data-phase="3"] { --phase-color: var(--phase3); }
+  .phase-card[data-phase="4"] { --phase-color: var(--phase4); }
+  .phase-card[data-phase="5"] { --phase-color: var(--phase5); }
+  .phase-card.active { border-color: var(--phase-color); background: var(--surface2); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--phase-color); }
+  .phase-card:hover:not(.active) { background: var(--surface2); transform: translateY(-2px); }
+  .phase-number { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--phase-color); color: var(--phase-color); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; transition: all 0.25s; position: relative; }
+  .phase-card.active .phase-number { background: var(--phase-color); color: var(--bg); }
+  .phase-card.you-are-here .phase-number::after { content: ''; position: absolute; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; top: -2px; right: -2px; }
+  .phase-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .phase-tagline { font-size: 11px; color: var(--text-mid); line-height: 1.45; font-family: 'DM Mono', monospace; }
+  .phase-you-are-here { position: absolute; bottom: 10px; right: 10px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: rgba(184,240,96,0.1); border: 1px solid rgba(184,240,96,0.2); border-radius: 4px; padding: 3px 7px; }
+
+  /* SUMMARY BAR */
+  .phase-summary { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+  .phase-summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s; margin-bottom: 56px; }
+  .phase-summary-bar:hover { border-color: var(--border2); }
+  .phase-summary-left { display: flex; align-items: center; gap: 14px; }
+  .phase-summary-num { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid; letter-spacing: 0.06em; }
+  .phase-summary-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .phase-summary-desc { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+  .phase-summary-cta { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); transition: color 0.2s; }
+  .phase-summary-bar:hover .phase-summary-cta { color: var(--text-mid); }
+
+  /* LIBRARY */
+  .library-section { max-width: 1200px; margin: 0 auto; padding: 0 40px 100px; }
+  .library-category { margin-bottom: 52px; }
+  .library-category-name { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; }
+  .library-category-desc { font-size: 13px; color: var(--text-mid); font-family: 'DM Mono', monospace; margin-bottom: 20px; }
+  .library-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .library-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+  .library-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .library-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .library-phase-tag { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; border: 1px solid; }
+  .library-card-icon { font-size: 16px; }
+  .library-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .library-card-desc { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+
+  /* MODALS */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* Phase modal — slides up */
+  .phase-modal { background: var(--surface); border-top: 1px solid var(--border); border-radius: 20px 20px 0 0; width: 100%; max-height: 88vh; overflow-y: auto; padding: 0 0 60px; transform: translateY(40px); transition: transform 0.35s ease; }
+  .modal-overlay.open .phase-modal { transform: translateY(0); }
+  .phase-modal-handle { display: flex; justify-content: center; padding: 16px 0 0; cursor: pointer; }
+  .phase-modal-handle-bar { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; }
+  .phase-modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 24px 48px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 2; }
+  .phase-modal-num { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; border: 1px solid; margin-bottom: 10px; display: inline-block; }
+  .phase-modal-title { font-family: 'Instrument Serif', serif; font-size: 32px; color: var(--text); line-height: 1.15; }
+  .phase-modal-body { padding: 40px 48px; display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 32px; }
+
+  /* Asset modal — centered */
+  .modal-overlay.asset-mode { align-items: center; }
+  .asset-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 560px; max-height: 80vh; overflow-y: auto; transform: translateY(20px) scale(0.97); transition: transform 0.3s ease; margin: auto; }
+  .modal-overlay.open .asset-modal { transform: translateY(0) scale(1); }
+  .asset-modal-header { padding: 28px 32px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; position: sticky; top: 0; background: var(--surface); z-index: 2; border-radius: 16px 16px 0 0; }
+  .asset-modal-icon { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border2); background: var(--surface2); font-size: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .asset-modal-type { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 6px; }
+  .asset-modal-title { font-family: 'Instrument Serif', serif; font-size: 26px; color: var(--text); line-height: 1.2; }
+  .asset-modal-body { padding: 28px 32px 32px; }
+  .asset-modal-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 24px; }
+  .asset-modal-what { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 12px; }
+  .asset-modal-bullets { list-style: none; margin-bottom: 32px; }
+  .asset-modal-bullets li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text); line-height: 1.5; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .asset-modal-bullets li:last-child { border-bottom: none; }
+  .asset-bullet-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .btn-download { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent); color: #0d0f0e; border: none; border-radius: 6px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; width: 100%; }
+  .btn-download:hover { background: #c8ff70; }
+
+  /* Manifesto modal */
+  .manifesto-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 680px; max-height: 85vh; overflow-y: auto; transform: translateY(20px) scale(0.97); transition: transform 0.3s ease; margin: auto; }
+  .modal-overlay.open .manifesto-modal { transform: translateY(0) scale(1); }
+  .manifesto-modal-header { padding: 32px 40px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; position: sticky; top: 0; background: var(--surface); z-index: 2; border-radius: 16px 16px 0 0; }
+  .manifesto-modal-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-dim); margin-bottom: 10px; }
+  .manifesto-modal-title { font-family: 'Instrument Serif', serif; font-size: 30px; color: var(--text); line-height: 1.2; }
+  .manifesto-modal-body { padding: 36px 40px 44px; }
+  .manifesto-section { margin-bottom: 28px; }
+  .manifesto-section h3 { font-family: 'Instrument Serif', serif; font-size: 20px; color: var(--text); margin-bottom: 10px; font-style: italic; }
+  .manifesto-section p { font-size: 14px; color: var(--text-mid); line-height: 1.75; }
+  .manifesto-pullquote { border-left: 2px solid var(--accent); padding: 16px 24px; margin: 28px 0; background: rgba(184,240,96,0.04); border-radius: 0 8px 8px 0; }
+  .manifesto-pullquote p { font-family: 'Instrument Serif', serif; font-size: 19px; color: var(--text); line-height: 1.45; font-style: italic; }
+
+  /* Shared modal */
+  .modal-close { background: var(--surface2); border: 1px solid var(--border); color: var(--text-mid); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; line-height: 1; margin-top: 4px; }
+  .modal-close:hover { color: var(--text); border-color: var(--text-dim); }
+  .detail-col-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; }
+  .detail-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 20px; }
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .action-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text); line-height: 1.45; }
+  .action-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--phase-color); margin-top: 6px; flex-shrink: 0; }
+  .asset-list { display: flex; flex-direction: column; gap: 8px; }
+  .asset-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface3); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; cursor: pointer; transition: all 0.2s; }
+  .asset-item:hover { border-color: var(--phase-color); transform: translateX(2px); }
+  .asset-left { display: flex; align-items: center; gap: 10px; }
+  .asset-icon-sm { width: 26px; height: 26px; border-radius: 5px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .asset-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .asset-type-tag { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .asset-arrow { color: var(--text-dim); font-size: 13px; transition: transform 0.2s; }
+  .asset-item:hover .asset-arrow { transform: translateX(3px); color: var(--text-mid); }
+  .resource-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+  .resource-item:last-child { border-bottom: none; }
+  .resource-item:hover .resource-title { color: var(--accent); }
+  .resource-source { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; padding: 3px 7px; white-space: nowrap; margin-top: 2px; }
+  .resource-title { font-size: 13px; color: var(--text); line-height: 1.4; font-weight: 600; transition: color 0.2s; }
+  .resource-desc { font-size: 12px; color: var(--text-mid); margin-top: 3px; line-height: 1.4; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>Numeric · AI Mandate Playbook</div>
+  <div class="header-right">
+    <div class="phase-pill"><div class="phase-pill-dot"></div>Your starting point: Phase 1</div>
+    <button class="btn-ghost" onclick="scrollToLibrary()">Resource Library</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">The AI Mandate Playbook</div>
+  <h1 class="hero-title">AI mandate expectations: high.<br><em>Margin for error: zero.</em></h1>
+  <p class="hero-sub">A practical hub for Controllers and finance leaders navigating the pressure to implement AI — without sacrificing the accuracy, auditability, or trust their teams depend on.</p>
+  <div class="hero-cta-row">
+    <button class="btn-primary">Take the diagnostic →</button>
+    <button class="btn-manifesto" onclick="openManifesto()">Read the manifesto</button>
+    <span class="hero-note">5 questions · 2 minutes</span>
+  </div>
+</section>
+
+<section class="journey-section">
+  <div class="section-label">Your implementation journey</div>
+  <div class="journey-map">
+    <div class="phase-card you-are-here active" data-phase="1" onclick="selectPhase(1)">
+      <div class="phase-number">01</div>
+      <div class="phase-name">Get the data right</div>
+      <div class="phase-tagline">Clean, accessible, API-ready</div>
+      <div class="phase-you-are-here">Your start</div>
+    </div>
+    <div class="phase-card" data-phase="2" onclick="selectPhase(2)">
+      <div class="phase-number">02</div>
+      <div class="phase-name">Calibrate your risk</div>
+      <div class="phase-tagline">Match AI to your complexity</div>
+    </div>
+    <div class="phase-card" data-phase="3" onclick="selectPhase(3)">
+      <div class="phase-number">03</div>
+      <div class="phase-name">Get real proof</div>
+      <div class="phase-tagline">Beyond demos and billboards</div>
+    </div>
+    <div class="phase-card" data-phase="4" onclick="selectPhase(4)">
+      <div class="phase-number">04</div>
+      <div class="phase-name">Experiment widely</div>
+      <div class="phase-tagline">In the sandbox, not the GL</div>
+    </div>
+    <div class="phase-card" data-phase="5" onclick="selectPhase(5)">
+      <div class="phase-number">05</div>
+      <div class="phase-name">Implement carefully</div>
+      <div class="phase-tagline">Deploy with discipline</div>
+    </div>
+  </div>
+</section>
+
+<section class="phase-summary">
+  <div class="phase-summary-bar" onclick="openPhaseModal(activePhase)">
+    <div class="phase-summary-left">
+      <div class="phase-summary-num" id="summary-num"></div>
+      <div>
+        <div class="phase-summary-title" id="summary-title"></div>
+        <div class="phase-summary-desc" id="summary-desc"></div>
+      </div>
+    </div>
+    <div class="phase-summary-cta">Explore phase resources ↗</div>
+  </div>
+</section>
+
+<section class="library-section" id="library">
+  <div class="section-label">Resource library</div>
+  <div id="library-content"></div>
+</section>
+
+<!-- PHASE MODAL -->
+<div class="modal-overlay" id="phase-modal-overlay" onclick="closeModal('phase-modal-overlay')">
+  <div class="phase-modal" onclick="event.stopPropagation()">
+    <div class="phase-modal-handle" onclick="closeModal('phase-modal-overlay')"><div class="phase-modal-handle-bar"></div></div>
+    <div class="phase-modal-header">
+      <div>
+        <div class="phase-modal-num" id="modal-num"></div>
+        <div class="phase-modal-title" id="modal-title"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('phase-modal-overlay')">×</button>
+    </div>
+    <div class="phase-modal-body" id="phase-modal-body"></div>
+  </div>
+</div>
+
+<!-- ASSET MODAL -->
+<div class="modal-overlay asset-mode" id="asset-modal-overlay" onclick="closeModal('asset-modal-overlay')">
+  <div class="asset-modal" onclick="event.stopPropagation()">
+    <div class="asset-modal-header">
+      <div>
+        <div class="asset-modal-icon" id="asset-modal-icon"></div>
+        <div class="asset-modal-type" id="asset-modal-type"></div>
+        <div class="asset-modal-title" id="asset-modal-title"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('asset-modal-overlay')">×</button>
+    </div>
+    <div class="asset-modal-body" id="asset-modal-body"></div>
+  </div>
+</div>
+
+<!-- MANIFESTO MODAL -->
+<div class="modal-overlay asset-mode" id="manifesto-modal-overlay" onclick="closeModal('manifesto-modal-overlay')">
+  <div class="manifesto-modal" onclick="event.stopPropagation()">
+    <div class="manifesto-modal-header">
+      <div>
+        <div class="manifesto-modal-eyebrow">Numeric · AI Mandate Playbook</div>
+        <div class="manifesto-modal-title">Experiment wildly.<br>Implement carefully.</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('manifesto-modal-overlay')">×</button>
+    </div>
+    <div class="manifesto-modal-body">
+      <div class="manifesto-section">
+        <h3>The mandate has arrived.</h3>
+        <p>Somewhere in the past 18 months, the question changed. It's no longer "should we be using AI?" It's "why aren't we further along?" Controllers and finance leaders across every sector are receiving the same directive from their CFOs and boards: move faster on AI. The expectations are high. The margin for error is zero.</p>
+      </div>
+      <div class="manifesto-pullquote"><p>"You need AI that drives your team forward. Not AI you'll rip out in 18 months."</p></div>
+      <div class="manifesto-section">
+        <h3>The problem isn't ambition. It's sequence.</h3>
+        <p>Most AI mandates fail not because teams weren't willing to try, but because they started in the wrong place. They bought tools before their data was clean. They ran pilots before they had baselines. They automated workflows that weren't documented. The technology worked fine. The foundation wasn't there to support it.</p>
+      </div>
+      <div class="manifesto-section">
+        <h3>There is a right order.</h3>
+        <p>Get the data right first. Then calibrate your risk honestly — not every workflow tolerates the same error rate. Then get real proof: baselines, benchmarks, parallel runs. Then experiment widely in a sandbox where mistakes are cheap. Then, and only then, implement carefully in the GL where they're not.</p>
+      </div>
+      <div class="manifesto-section">
+        <h3>What this playbook is.</h3>
+        <p>This is not a collection of articles to read. It's a set of tools, templates, and frameworks to use — built with and for the Controllers and accounting leaders who are actually doing this work. Every resource here is designed to help you make a decision, communicate clearly, or act with confidence.</p>
+      </div>
+      <div class="manifesto-pullquote"><p>"AI amplifies what it finds. The technology is not the bottleneck. The organization is." — David Fuhriman, CFO, Jewish Federation of San Diego</p></div>
+      <div class="manifesto-section">
+        <h3>Start where you are.</h3>
+        <p>Take the diagnostic. Find your phase. Use what's relevant to you now, and know that the rest will be here when you need it. The work is infinite — which means the opportunity is too.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const phases = {
+  1: { color:'#60a8f0', name:'Get the data right', tagline:'Clean, accessible, API-ready data is the prerequisite for everything.', description:'Before any AI implementation can succeed, your data needs to be accessible, clean, and consistently defined. Most teams discover during this phase that their data isn\'t as ready as they assumed — and that the work of fixing it is unglamorous but foundational to everything that follows.', actions:['Audit data accessibility — can systems expose data via API, or only CSV export?','Establish single sources of truth: one definition of "active customer," "open invoice," "reconciled balance"','Document your chart of accounts logic so any system can interpret transactions consistently','Run David Fuhriman\'s diagnostic: ask your team "how many active customers do we have?" — if the answer hedges, your data isn\'t ready'], assets:[{icon:'✓',name:'Data Readiness Checklist',type:'Template'},{icon:'⬡',name:'SOP Documentation Starter',type:'Template'},{icon:'◈',name:'Chart of Accounts Audit Guide',type:'Guide'}], resources:[{source:'David Fuhriman',title:'Infinite Work: Why Most Organizations Fail at AI Adoption',desc:'The foundational case for why infrastructure precedes tooling.'},{source:'CrossCountry',title:'Value → Foundation → Design → Build',desc:'Tom and Cindy\'s sequencing model that starts with clean foundations, not shiny tools.'},{source:'AICPA',title:'Data Integrity in AI-Assisted Accounting',desc:'Standards guidance on what auditable data quality looks like in practice.'}]},
+  2: { color:'#f0c060', name:'Calibrate your risk', tagline:'Not every workflow tolerates the same error rate. Map yours honestly.', description:'Phase 2 is about honestly mapping which parts of your operation can tolerate experimentation and which require near-zero error tolerance — before you commit to any implementation path.', actions:['Map processes against three criteria: auditability, observability, and repeatability','Identify which workflows touch external reporting vs. internal analysis only','Build a cross-functional steering committee before any tooling decisions','Document who is accountable when an AI-assisted workflow produces an error'], assets:[{icon:'⊙',name:'Risk Calibration Matrix',type:'Template'},{icon:'◫',name:'Steering Committee Guide',type:'Guide'},{icon:'▦',name:'Build vs. Buy Framework',type:'Tool'}], resources:[{source:'CrossCountry',title:'The Three Non-Negotiables: Auditability, Observability, Repeatability',desc:'Tom\'s framework for evaluating any AI implementation against compliance requirements.'},{source:'David Fuhriman',title:'Governance: Moving Fast Without Creating Chaos',desc:'How to set clear AI guardrails that enable confidence rather than bureaucracy.'},{source:'Big 4 Research',title:'AI Risk Frameworks for Finance Functions',desc:'Industry-standard approaches to categorizing automation risk in regulated environments.'}]},
+  3: { color:'#f07860', name:'Get real proof', tagline:'Proof means data that holds up to scrutiny. Not a successful demo.', description:'This is the phase most teams skip — they move from pilot to production before establishing genuine benchmarks. Real proof means having before/after data that holds up to scrutiny, not just a vendor case study or an impressive demo.', actions:['Establish baseline metrics before any implementation: close cycle time, error rate, hours per reconciliation','Run parallel workflows — AI-assisted alongside existing — before deprecating the old process','Document the criteria you\'ll use to declare the pilot successful before you run it','Gather internal testimony: what are the people doing this work actually experiencing?'], assets:[{icon:'◉',name:'Pilot Scorecard Template',type:'Template'},{icon:'▣',name:'Baseline Metrics Worksheet',type:'Template'},{icon:'◈',name:'CFO Defense Deck',type:'Deck'}], resources:[{source:'Abridge',title:'What "Proof" Actually Looks Like in Production',desc:'Francisco and Kenny on what separates real implementation evidence from impressive demos.'},{source:'Harvard Business Review',title:'Why AI Pilots Fail to Scale',desc:'The organizational patterns that prevent successful pilots from becoming real programs.'},{source:'Numeric',title:'Month-End Close Maturity Model',desc:'A benchmark framework for evaluating your close process against industry standards.'}]},
+  4: { color:'#b060f0', name:'Experiment widely', tagline:'Move fast — in the sandbox, not the GL.', description:'With clean data, calibrated risk, and genuine proof points in hand, you\'re ready to move fast — but only in the right environment. Phase 4 is about maximizing what you learn before anything touches your general ledger.', actions:['Stand up a dedicated sandbox environment disconnected from production data','Run an accounting hackathon: structured, time-boxed experiments across the team','Evaluate the build vs. buy vs. vibe-code decision for each workflow under test','Document what you learn from experiments that fail — they\'re equally valuable'], assets:[{icon:'◎',name:'Accounting Hackathon Scheduler',type:'Tool'},{icon:'⬡',name:'AI Tools Directory',type:'Directory'},{icon:'◈',name:'"Should I Vibe Code This?" Calculator',type:'Tool'}], resources:[{source:'Abridge',title:'The Accounting Engineer: A New Finance Role',desc:'Kenny Kha on how the gap between engineering and accounting is compressing.'},{source:'Francisco Meyo',title:'We\'re Not in the Business of Building Software',desc:'A sharp framework for when to build vs. buy, grounded in what finance teams are actually for.'},{source:'a16z',title:'The Build vs. Buy Decision in the Age of AI Agents',desc:'How the calculus has shifted as foundation models lower the cost of custom development.'}]},
+  5: { color:'#60f0b8', name:'Implement carefully', tagline:'From sandbox to GL — with the rigor that requires.', description:'Production implementation in the GL is a different discipline than experimentation. Phase 5 is about moving from sandbox to real workflows with the rigor those workflows require — rollout plans, fallback procedures, and the human change management that determines whether any of it sticks.', actions:['Define rollback criteria before go-live: under what conditions do you revert?','Build ongoing monitoring into the workflow — not a one-time audit, a continuous check','Address identity concerns directly: don\'t frame AI as efficiency. Frame it as capacity.','Create the internal communication plan so your team understands what changed and why'], assets:[{icon:'◫',name:'Go-Live Readiness Checklist',type:'Template'},{icon:'▦',name:'"Infinite Work" Mapping Worksheet',type:'Template'},{icon:'◉',name:'Team Change Communication Template',type:'Template'}], resources:[{source:'David Fuhriman',title:'Human Capital: People Don\'t Resist Technology, They Resist Identity Change',desc:'The most important thing a Controller needs to read before rolling out AI to their team.'},{source:'CrossCountry',title:'From Agent Sprawl to Agent Governance',desc:'Cindy on what happens when you don\'t manage the transition from experimentation to production.'},{source:'McKinsey',title:'Change Management in Finance Transformation',desc:'A research-backed framework for managing the human side of process change.'}]}
+};
+
+const allAssets = [
+  { phase:1,color:'#60a8f0',icon:'✓',name:'Data Readiness Checklist',type:'Template',category:'decision',desc:'A sequential checklist for evaluating whether your financial data is AI-ready.',bullets:['Assess API accessibility vs. CSV-only exports','Identify duplicate or conflicting data sources','Validate chart of accounts consistency','Score overall readiness against a 10-point rubric']},
+  { phase:1,color:'#60a8f0',icon:'⬡',name:'SOP Documentation Starter',type:'Template',category:'execution',desc:'A structured template for documenting finance workflows before you attempt to automate them.',bullets:['Step-by-step process mapping format','Decision point documentation','Exception handling documentation','"New employee test" evaluation criteria']},
+  { phase:2,color:'#f0c060',icon:'⊙',name:'Risk Calibration Matrix',type:'Template',category:'decision',desc:'Map every workflow against auditability, observability, and repeatability before committing to automation.',bullets:['Three-axis scoring for each process','External vs. internal reporting risk tiers','Automation confidence thresholds by process type','Priority ranking output']},
+  { phase:2,color:'#f0c060',icon:'◫',name:'Steering Committee Guide',type:'Guide',category:'communication',desc:'How to structure cross-functional AI governance so finance doesn\'t get stuck solving everything in a silo.',bullets:['Recommended committee composition by company size','Meeting cadence and agenda templates','Decision rights framework','Escalation paths for high-risk AI decisions']},
+  { phase:2,color:'#f0c060',icon:'▦',name:'Build vs. Buy Framework',type:'Tool',category:'decision',desc:'A decision framework for evaluating whether to build custom AI solutions or use vendor products.',bullets:['Six core evaluation criteria','Auditability and compliance weighting','Team maintenance capacity assessment','Total cost of ownership comparison template']},
+  { phase:3,color:'#f07860',icon:'◈',name:'CFO Defense Deck',type:'Deck',category:'communication',desc:'A presentation template for building the internal case for your AI mandate.',bullets:['Executive framing for AI investment','"Capacity, not replacement" communication framework','Risk mitigation narrative','ROI projection template with conservative/optimistic scenarios']},
+  { phase:3,color:'#f07860',icon:'◉',name:'Pilot Scorecard',type:'Template',category:'decision',desc:'Establish and track the metrics that determine whether your AI pilot actually worked.',bullets:['Pre-pilot baseline capture template','Success criteria definition worksheet','Parallel run comparison framework','Go/no-go decision rubric']},
+  { phase:4,color:'#b060f0',icon:'◎',name:'Accounting Hackathon Scheduler',type:'Tool',category:'execution',desc:'Everything you need to run a structured accounting AI hackathon.',bullets:['Half-day and full-day formats','Team composition recommendations','Challenge prompt library (accounting-specific)','Output evaluation and selection process']},
+  { phase:4,color:'#b060f0',icon:'⬡',name:'AI Tools Directory',type:'Directory',category:'decision',desc:'A curated directory of AI tools for accounting teams, with notes on where each partner actually thrives.',bullets:['Categorized by use case (reconciliation, reporting, flux, etc.)','Partner context from practitioners','Integration compatibility notes','AI-powered: describe your problem, get suggestions']},
+  { phase:4,color:'#b060f0',icon:'◈',name:'"Should I Vibe Code This?" Calculator',type:'Tool',category:'decision',desc:'Should you build this yourself? Input your situation and get a clear recommendation.',bullets:['Company size and compliance weighting','SOC 2 and audit exposure factors','Repeatable vs. one-off task assessment','Team engineering capacity scoring']},
+  { phase:5,color:'#60f0b8',icon:'◫',name:'Go-Live Readiness Checklist',type:'Template',category:'execution',desc:'A readiness checklist for before any AI workflow touches your general ledger.',bullets:['Data pipeline validation steps','Rollback criteria definition','Monitoring and alerting setup','Stakeholder sign-off documentation']},
+  { phase:5,color:'#60f0b8',icon:'▦',name:'"Infinite Work" Mapping Worksheet',type:'Template',category:'communication',desc:'A worksheet for mapping what your team isn\'t doing now — the value AI capacity could unlock.',bullets:['Capacity audit: hours spent on manual work','Backlog of undone high-value work','Reframe calculation: what becomes possible','Team alignment exercise format']},
+];
+
+const categories = [
+  { id:'decision', name:'Decision-Support', desc:'Tools that help you evaluate options, calibrate risk, and make confident calls' },
+  { id:'communication', name:'Communication', desc:'Assets for talking to leadership, your board, and your team' },
+  { id:'execution', name:'Execution', desc:'Templates and tools for actually doing the work' }
+];
+
+let activePhase = 1;
+
+function selectPhase(n) {
+  activePhase = n;
+  const p = phases[n];
+  document.querySelectorAll('.phase-card').forEach(c => {
+    c.classList.remove('active');
+    if (parseInt(c.dataset.phase) === n) c.classList.add('active');
+  });
+  const numEl = document.getElementById('summary-num');
+  numEl.textContent = `Phase 0${n}`;
+  numEl.style.color = p.color;
+  numEl.style.borderColor = p.color + '40';
+  numEl.style.background = p.color + '10';
+  document.getElementById('summary-title').textContent = p.name;
+  document.getElementById('summary-desc').textContent = p.tagline;
+}
+
+function openPhaseModal(n) {
+  const p = phases[n];
+  const numEl = document.getElementById('modal-num');
+  numEl.textContent = `Phase 0${n}`;
+  numEl.style.color = p.color;
+  numEl.style.borderColor = p.color + '40';
+  numEl.style.background = p.color + '10';
+  document.getElementById('modal-title').textContent = p.name;
+  document.getElementById('phase-modal-body').innerHTML = `
+    <div style="--phase-color:${p.color}">
+      <div class="detail-col-label">Where you are</div>
+      <p class="detail-desc">${p.description}</p>
+      <div class="detail-col-label" style="margin-top:20px">Prioritized actions</div>
+      <ul class="action-list">${p.actions.map(a=>`<li class="action-item"><div class="action-dot"></div>${a}</li>`).join('')}</ul>
+    </div>
+    <div style="--phase-color:${p.color}">
+      <div class="detail-col-label">Tools & templates</div>
+      <div class="asset-list">${p.assets.map(a=>`<div class="asset-item" onclick="openAssetModal('${a.name.replace(/'/g,'\\\'')}')" style="--phase-color:${p.color}"><div class="asset-left"><div class="asset-icon-sm">${a.icon}</div><div><div class="asset-name">${a.name}</div><div class="asset-type-tag">${a.type}</div></div></div><div class="asset-arrow">→</div></div>`).join('')}</div>
+    </div>
+    <div>
+      <div class="detail-col-label">External resources</div>
+      ${p.resources.map(r=>`<div class="resource-item"><div class="resource-source" style="flex-shrink:0">${r.source}</div><div><div class="resource-title">${r.title}</div><div class="resource-desc">${r.desc}</div></div></div>`).join('')}
+    </div>`;
+  document.getElementById('phase-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function openAssetModal(name) {
+  const asset = allAssets.find(a => a.name === name);
+  if (!asset) return;
+  closeModal('phase-modal-overlay');
+  document.getElementById('asset-modal-icon').textContent = asset.icon;
+  document.getElementById('asset-modal-icon').style.borderColor = asset.color + '40';
+  document.getElementById('asset-modal-icon').style.background = asset.color + '10';
+  document.getElementById('asset-modal-type').textContent = asset.type;
+  document.getElementById('asset-modal-title').textContent = asset.name;
+  document.getElementById('asset-modal-body').innerHTML = `
+    <p class="asset-modal-desc">${asset.desc}</p>
+    <div class="asset-modal-what">What's inside</div>
+    <ul class="asset-modal-bullets">${asset.bullets.map(b=>`<li><div class="asset-bullet-dot" style="background:${asset.color}"></div>${b}</li>`).join('')}</ul>
+    <button class="btn-download">Download / Access →</button>`;
+  setTimeout(()=>{ document.getElementById('asset-modal-overlay').classList.add('open'); document.body.style.overflow='hidden'; },50);
+}
+
+function openManifesto() {
+  document.getElementById('manifesto-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function scrollToLibrary() {
+  document.getElementById('library').scrollIntoView({ behavior:'smooth' });
+}
+
+function renderLibrary() {
+  document.getElementById('library-content').innerHTML = categories.map(cat => {
+    const assets = allAssets.filter(a => a.category === cat.id);
+    return `<div class="library-category">
+      <div class="library-category-name">${cat.name}</div>
+      <div class="library-category-desc">${cat.desc}</div>
+      <div class="library-grid">${assets.map(a=>`<div class="library-card" onclick="openAssetModal('${a.name.replace(/'/g,'\\\'')}')" ><div class="library-card-top"><span class="library-phase-tag" style="color:${a.color};border-color:${a.color}30;background:${a.color}10;">Phase 0${a.phase}</span><span class="library-card-icon">${a.icon}</span></div><div class="library-card-name">${a.name}</div><div class="library-card-desc">${a.desc}</div></div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') ['phase-modal-overlay','asset-modal-overlay','manifesto-modal-overlay'].forEach(closeModal);
+});
+
+selectPhase(1);
+renderLibrary();
+</script>
+</body>
+</html>
