@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Finance API Starting Point — Numeric</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface-2: #1f1f1f;
+    --border: #2a2a2a;
+    --accent: #c8f55a;
+    --accent-dim: rgba(200,245,90,0.12);
+    --accent-dim2: rgba(200,245,90,0.06);
+    --text: #e8e8e0;
+    --text-muted: #767670;
+    --text-dim: #3a3a36;
+    --tag-erp: #3d5afe;
+    --tag-erp-bg: rgba(61,90,254,0.12);
+    --tag-data: #ff6d00;
+    --tag-data-bg: rgba(255,109,0,0.12);
+    --tag-workflow: #00bfa5;
+    --tag-workflow-bg: rgba(0,191,165,0.12);
+    --tag-payroll: #e040fb;
+    --tag-payroll-bg: rgba(224,64,251,0.12);
+    --tag-banking: #ffd740;
+    --tag-banking-bg: rgba(255,215,64,0.12);
+    --tag-ai: #f44336;
+    --tag-ai-bg: rgba(244,67,54,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wordmark {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .wordmark span {
+    color: var(--accent);
+  }
+
+  .header-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 72px 0 56px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 5vw, 60px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin-bottom: 16px;
+  }
+
+  .hero-caveat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    max-width: 340px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 10px 14px 10px 36px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-weight: 300;
+  }
+
+  .search-wrap input:focus { border-color: var(--accent); }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .search-wrap input::placeholder { color: var(--text-dim); }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 9px 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0e0e0e;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .stat-divider { width: 1px; height: 20px; background: var(--border); }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    padding: 28px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover { background: var(--surface-2); }
+
+  .card.hidden { display: none; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .card-logo {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .card-category-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    flex-shrink: 0;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .card-subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .card-rationale {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-connects {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .card-cta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-cta::after { content: '→'; }
+
+  /* CATEGORY COLORS */
+  .cat-erp { color: var(--tag-erp); background: var(--tag-erp-bg); }
+  .cat-data { color: var(--tag-data); background: var(--tag-data-bg); }
+  .cat-workflow { color: var(--tag-workflow); background: var(--tag-workflow-bg); }
+  .cat-payroll { color: var(--tag-payroll); background: var(--tag-payroll-bg); }
+  .cat-banking { color: var(--tag-banking); background: var(--tag-banking-bg); }
+  .cat-ai { color: var(--tag-ai); background: var(--tag-ai-bg); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.88);
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal-header {
+    padding: 32px 32px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+  .modal-cat-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .modal-tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .modal-body { padding: 28px 32px 32px; }
+
+  .modal-section {
+    margin-bottom: 28px;
+  }
+
+  .modal-section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .modal-section p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .use-cases {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .use-case {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    background: var(--accent-dim2);
+    border-left: 2px solid var(--accent);
+  }
+
+  .use-case-icon { flex-shrink: 0; margin-top: 1px; }
+
+  .connects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .connect-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .connect-pill.featured {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .complexity-bar {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  .complexity-pip {
+    width: 20px;
+    height: 4px;
+    background: var(--border);
+  }
+
+  .complexity-pip.filled { background: var(--accent); }
+
+  .complexity-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .heard-from {
+    background: var(--accent-dim2);
+    border: 1px solid rgba(200,245,90,0.15);
+    padding: 14px 16px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .heard-from-attr {
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: none;
+    padding: 80px 32px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+
+  .empty-state.visible { display: block; }
+
+  .empty-state p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+  }
+
+  .footer-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+
+  /* SCROLL */
+  .modal::-webkit-scrollbar { width: 4px; }
+  .modal::-webkit-scrollbar-track { background: var(--surface); }
+  .modal::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* ANIMATIONS */
+  .card { animation: fadeUp 0.3s ease both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .grid .card:nth-child(2) { animation-delay: 0.04s; }
+  .grid .card:nth-child(3) { animation-delay: 0.08s; }
+  .grid .card:nth-child(4) { animation-delay: 0.12s; }
+  .grid .card:nth-child(5) { animation-delay: 0.16s; }
+  .grid .card:nth-child(6) { animation-delay: 0.20s; }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    h1 { font-size: 32px; }
+    .controls { gap: 8px; }
+    .stats-bar { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="wordmark"><span>Numeric</span> · AI Mandate Playbook</div>
+      <div class="header-label">Resource</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <section class="hero">
+      <div class="hero-eyebrow">API Starting Point</div>
+      <h1>The Finance Team's<br><em>API Library</em></h1>
+      <p class="hero-body">A practitioner-built reference for Controllers and Accounting Managers evaluating which APIs to connect — and why each one earns a place in your stack.</p>
+      <div class="hero-caveat">⌘ This is a starting point, not a comprehensive registry. The API landscape shifts fast. Use this to orient your thinking, then validate with your team and your auditors.</div>
+    </section>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search" placeholder="Search APIs...">
+      </div>
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="erp">ERP</button>
+      <button class="filter-btn" data-cat="data">Data & BI</button>
+      <button class="filter-btn" data-cat="workflow">Workflow</button>
+      <button class="filter-btn" data-cat="payroll">Payroll & HR</button>
+      <button class="filter-btn" data-cat="banking">Banking & AP</button>
+      <button class="filter-btn" data-cat="ai">AI & Automation</button>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-num" id="visible-count">16</div>
+        <div class="stat-label">APIs shown</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Gap fills</div>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+    <div class="empty-state" id="empty-state"><p>// no results — try a different filter or search</p></div>
+
+    <footer>
+      <div class="footer-note">Built for the AI Mandate Playbook · Numeric · 2026<br>API landscape current as of Q1 2026. Verify docs before building.</div>
+    </footer>
+
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div class="modal-cat-tag" id="m-cat-tag"></div>
+      <h2 id="m-name"></h2>
+      <div class="modal-tagline" id="m-tagline"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-label">Why it matters</div>
+        <p id="m-rationale"></p>
+      </div>
+      <div class="modal-section" id="m-heard-wrap">
+        <div class="modal-section-label">From the field</div>
+        <div class="heard-from" id="m-heard"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Use cases</div>
+        <div class="use-cases" id="m-use-cases"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Connects well with</div>
+        <div class="connects-grid" id="m-connects"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Implementation complexity</div>
+        <div class="complexity-bar" id="m-complexity"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const APIS = [
+  // ERP
+  {
+    id: 'netsuite',
+    name: 'NetSuite',
+    tagline: 'Oracle NetSuite SuiteQL & REST API',
+    category: 'erp',
+    abbr: 'NS',
+    cardRationale: 'The backbone of most mid-market finance stacks. If your data lives in NetSuite, this API is your first connection point for automations, pipelines, and reporting.',
+    rationale: 'NetSuite is the center of gravity for most mid-market finance teams. Its SuiteQL interface lets you write SQL-style queries against your entire ERP dataset — GL entries, subledgers, transactions — without exporting CSVs manually. If you\'re building automations (journal entry uploads, close checklists, pipeline feeds), this is the API you\'ll hit first. Understanding its structure is foundational before you build anything else.',
+    heard: 'Kenny Kha described building a NetSuite-to-Snowflake pipeline as one of the first real integrations his team tackled — pulling transaction data out and feeding it into a data warehouse for downstream analysis.',
+    heardAttr: '— Kenny Kha, Accounting Engineer, Abridge',
+    useCases: [
+      'Auto-upload journal entries from a CSV transformation',
+      'Pull GL data into a data warehouse (Snowflake, BigQuery)',
+      'Query open AR/AP for accrual calculations',
+      'Trigger close checklist tasks on period end',
+    ],
+    connects: ['Snowflake', 'Numeric', 'Ramp', 'Rippling', 'Salesforce', 'Python'],
+    connectsFeatured: ['Numeric', 'Snowflake'],
+    complexity: 3,
+    complexityLabel: 'Moderate — SuiteQL has a learning curve; REST is well-documented'
+  },
+  {
+    id: 'sage',
+    name: 'Sage Intacct',
+    tagline: 'Sage Intacct Web Services API',
+    category: 'erp',
+    abbr: 'SI',
+    cardRationale: 'The ERP of choice for non-profits and professional services. Its multi-entity, multi-currency architecture makes it API-ready for organizations running complex consolidations.',
+    rationale: 'Sage Intacct is the ERP of choice for non-profits, professional services, and multi-entity organizations that need dimensional reporting out of the box. Its API supports object-level CRUD operations — create, read, update, delete — across transactions, vendors, projects, and more. For teams running consolidations across entities or grants, this API unlocks automation that the UI simply cannot match in speed.',
+    heard: null,
+    useCases: [
+      'Multi-entity journal entry posting at close',
+      'Grant budget vs. actuals reporting pulls',
+      'Vendor and AP workflow automation',
+      'Intercompany elimination entries',
+    ],
+    connects: ['Numeric', 'Snowflake', 'Salesforce', 'Rippling', 'Python'],
+    connectsFeatured: ['Numeric'],
+    complexity: 3,
+    complexityLabel: 'Moderate — XML-based; strong documentation'
+  },
+  {
+    id: 'qbo',
+    name: 'QuickBooks Online',
+    tagline: 'Intuit QuickBooks Online API',
+    category: 'erp',
+    abbr: 'QB',
+    cardRationale: 'The entry point for smaller finance teams. A well-documented REST API with OAuth — easier to connect to than NetSuite, but with meaningful data limits at scale.',
+    rationale: 'QuickBooks Online is where many finance teams start before they outgrow it. Its REST API is one of the most developer-friendly in the ERP category — clean OAuth, solid documentation, and a wide ecosystem of connectors. For teams still on QBO, this API enables automated journal uploads, reporting pulls, and integration with procurement or billing systems before a larger ERP migration.',
+    heard: null,
+    useCases: [
+      'Sync invoices from a billing system automatically',
+      'Pull P&L data into a reporting template',
+      'Post bulk journal entries from a payroll run',
+      'Reconcile bank feeds against transactions',
+    ],
+    connects: ['Ramp', 'Rippling', 'Stripe', 'Python', 'Alteryx'],
+    connectsFeatured: ['Ramp'],
+    complexity: 1,
+    complexityLabel: 'Low — well-documented REST with OAuth 2.0'
+  },
+
+  // DATA & BI
+  {
+    id: 'snowflake',
+    name: 'Snowflake',
+    tagline: 'Snowflake SQL API & Connector',
+    category: 'data',
+    abbr: 'SF',
+    cardRationale: 'The data warehouse that accounting teams are building toward. APIs let you pipe ERP data in, curate finance-ready datasets, and feed BI tools — all without touching the UI.',
+    rationale: 'Snowflake has become the data warehouse of choice for finance teams that have outgrown Excel-based reporting. Its API lets your team programmatically load curated datasets from NetSuite, Rippling, and other source systems — then expose them to a BI layer for self-serve reporting. The key insight from practitioners: don\'t just dump raw data in. Curate the reports on the way in so the BI tool stays clean.',
+    heard: 'Francisco Meyo described curating datasets from NetSuite, Rippling, and Abridge\'s own production data — uploading curated reports daily to Snowflake, then using a BI tool to visualize. "Rather than just connecting this data into Snowflake, we curate the reports and upload them on a daily basis."',
+    heardAttr: '— Francisco Meyo, Controller, Abridge',
+    useCases: [
+      'NetSuite → Snowflake transaction pipeline',
+      'Cross-source finance data lake (ERP + payroll + billing)',
+      'Daily close metrics feed for CFO dashboards',
+      'Historical trend analysis across GL accounts',
+    ],
+    connects: ['NetSuite', 'Rippling', 'Ramp', 'dbt', 'Tableau', 'BigQuery'],
+    connectsFeatured: ['NetSuite', 'Rippling'],
+    complexity: 2,
+    complexityLabel: 'Low-moderate — Python connector is well-supported'
+  },
+  {
+    id: 'bigquery',
+    name: 'BigQuery',
+    tagline: 'Google BigQuery API',
+    category: 'data',
+    abbr: 'BQ',
+    cardRationale: 'Google\'s serverless data warehouse. Preferred by teams already in the Google ecosystem — and the target for Numeric\'s upcoming sub-ledger upload feature.',
+    rationale: 'BigQuery is the data warehouse destination for teams already on Google Workspace. Its serverless architecture means no infrastructure to manage — you pipe data in and query it. If you\'re on Numeric, this is particularly relevant: the upcoming feature allowing sub-ledger uploads directly to BigQuery or SuiteQL queries from NetSuite makes this a near-term connection point worth understanding now.',
+    heard: 'Francisco mentioned this directly: "He was telling me about this feature that is going to allow us to upload our sub layers into BigQuery or have Numeric download a SuiteQL query from NetSuite. Those things are very fascinating."',
+    heardAttr: '— Francisco Meyo, Controller, Abridge',
+    useCases: [
+      'Sub-ledger uploads from Numeric',
+      'Finance data lake for cross-system analysis',
+      'Looker Studio reporting off live GL data',
+      'ML model inputs for anomaly detection',
+    ],
+    connects: ['Numeric', 'NetSuite', 'Rippling', 'Looker', 'Python'],
+    connectsFeatured: ['Numeric'],
+    complexity: 2,
+    complexityLabel: 'Low-moderate — Google client libraries are excellent'
+  },
+  {
+    id: 'tableau',
+    name: 'Tableau / Sigma',
+    tagline: 'Tableau REST API & Embedding API',
+    category: 'data',
+    abbr: 'BI',
+    cardRationale: 'The visualization layer on top of your data warehouse. APIs let you refresh dashboards programmatically and embed finance reporting into internal tools.',
+    rationale: 'BI tools sit at the end of the data pipeline — they turn the curated datasets in your warehouse into the dashboards your CFO actually uses. Tableau\'s REST API lets you trigger workbook refreshes, manage user access, and embed visualizations programmatically. For finance teams, this means the close reporting cycle can be fully automated: ERP data in → warehouse curated → BI refreshed → CFO dashboard updated.',
+    heard: null,
+    useCases: [
+      'Trigger dashboard refresh after close',
+      'Embed finance KPIs in an internal portal',
+      'Automate workbook permissioning for new team members',
+      'Pull dashboard metadata for audit logs',
+    ],
+    connects: ['Snowflake', 'BigQuery', 'NetSuite'],
+    connectsFeatured: ['Snowflake'],
+    complexity: 2,
+    complexityLabel: 'Moderate — REST API well-documented; Embedding requires JS'
+  },
+
+  // WORKFLOW
+  {
+    id: 'salesforce',
+    name: 'Salesforce',
+    tagline: 'Salesforce REST & SOQL API',
+    category: 'workflow',
+    abbr: 'CRM',
+    cardRationale: 'The source of revenue truth for most SaaS and services businesses. Pulling opportunity and contract data into your ERP is one of the most impactful integrations finance teams can build.',
+    rationale: 'Salesforce holds the revenue pipeline data that finance teams need for accrual calculations, deferred revenue, and quota-to-close tracking. The canonical integration: pull closed-won opportunities from Salesforce and auto-create subscription records or invoices in your ERP. Francisco Meyo\'s team built this exact flow — Salesforce opportunities into NetSuite\'s subscription management module — reducing a 57-click manual process to an automated one.',
+    heard: 'Francisco described helping a colleague "create this solution that goes and grabs data from the Salesforce opportunities and creates subscription that goes into [NetSuite]." The module took 57 clicks to set up manually — the automation eliminated that entirely.',
+    heardAttr: '— Francisco Meyo, Controller, Abridge',
+    useCases: [
+      'Closed-won → ERP subscription creation',
+      'Pipeline-based revenue accrual',
+      'Contract data for commission calculations',
+      'ARR/MRR reporting reconciliation',
+    ],
+    connects: ['NetSuite', 'Sage Intacct', 'Python', 'Snowflake'],
+    connectsFeatured: ['NetSuite'],
+    complexity: 2,
+    complexityLabel: 'Moderate — SOQL is approachable; REST is standard'
+  },
+  {
+    id: 'numeric',
+    name: 'Numeric',
+    tagline: 'Numeric Close Management API',
+    category: 'workflow',
+    abbr: 'NUM',
+    cardRationale: 'The close management layer built for AI-native finance teams. APIs let you trigger tasks, pull reconciliation data, and pipe sub-ledger data to your warehouse — without leaving your workflow.',
+    rationale: 'Numeric\'s API is the connective tissue between your close workflow and the rest of your stack. Rather than downloading CSVs to populate checklists or manually reconciling sub-ledger balances, the API lets your team trigger close tasks programmatically, pull reconciliation status, and — with the upcoming warehouse sync feature — pipe sub-ledger data directly to BigQuery or query against NetSuite via SuiteQL. It\'s the "semantic data layer" that lets your CFO ask questions about the business, not just the system.',
+    heard: null,
+    useCases: [
+      'Sub-ledger data sync to BigQuery or Snowflake',
+      'Close task triggering on period-end conditions',
+      'Reconciliation status reporting for CFO review',
+      'Audit trail export for controls documentation',
+    ],
+    connects: ['NetSuite', 'BigQuery', 'Snowflake', 'Sage Intacct', 'Ramp'],
+    connectsFeatured: ['NetSuite', 'BigQuery'],
+    complexity: 1,
+    complexityLabel: 'Low — purpose-built for the accounting workflow'
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    tagline: 'GitHub REST API & Webhooks',
+    category: 'workflow',
+    abbr: 'GH',
+    cardRationale: 'The version control layer for your automation code. Finance teams using GitHub to manage their micro-automations can demonstrate control, access restriction, and auditability to their auditors.',
+    rationale: 'GitHub isn\'t just for engineers. As your accounting team builds micro-automations, the code repository becomes an internal controls artifact. Francisco\'s team runs all automations in a GitHub repo with version control and restricted access — a detail that directly addresses ITGC requirements for SOX compliance. The API lets you trigger workflows, manage access, and log changes programmatically. If you\'re building anything that touches financial data, GitHub is how you demonstrate "this is controlled."',
+    heard: '"All our little micro-automations, they are run in a GitHub repository where we have version control and restricted access. And we can share our credentials on a secure manner."',
+    heardAttr: '— Francisco Meyo, Controller, Abridge',
+    useCases: [
+      'Version-controlled automation scripts for audit evidence',
+      'Restricted access to financial automation code',
+      'CI/CD triggers for automation testing',
+      'Change log for ITGC documentation',
+    ],
+    connects: ['Python', 'Claude Code', 'Cursor', 'Snowflake'],
+    connectsFeatured: ['Python'],
+    complexity: 1,
+    complexityLabel: 'Low — excellent documentation, widely supported'
+  },
+
+  // PAYROLL & HR
+  {
+    id: 'rippling',
+    name: 'Rippling',
+    tagline: 'Rippling Workforce Data API',
+    category: 'payroll',
+    abbr: 'RP',
+    cardRationale: 'The HR and payroll platform that both Abridge and Masterworks ran on. Pulling payroll registers and headcount data for journal entry automation is one of the highest-ROI integrations for an accounting team.',
+    rationale: 'Rippling is the HR system of record for payroll, benefits, and headcount data — and it\'s one of the most common data sources mentioned by practitioners building accounting automations. The payroll register export to journal entry is the canonical use case: take messy payroll data from Rippling, map it through department and cost center tables, and auto-generate the journal entry for upload into your ERP. This is literally the exercise Francisco uses in his hiring process.',
+    heard: 'Kenny described the interview case study his team runs: "Every month, you have this payroll register. And we\'re trying to create the journal entries for it. Coded by department. The payroll register that you\'re given is a fairly messy file. It has a lot of different tables on it. It\'s pulled directly from Rippling, ADP, wherever you get it."',
+    heardAttr: '— Kenny Kha, Accounting Engineer, Abridge',
+    useCases: [
+      'Payroll register → journal entry generation',
+      'Headcount data for department-level accruals',
+      'Benefits expense allocation by cost center',
+      'New hire onboarding data sync to ERP',
+    ],
+    connects: ['NetSuite', 'Snowflake', 'Python', 'Numeric'],
+    connectsFeatured: ['NetSuite'],
+    complexity: 2,
+    complexityLabel: 'Moderate — API access requires IT/security approval'
+  },
+  {
+    id: 'adp',
+    name: 'ADP',
+    tagline: 'ADP Workforce Now API',
+    category: 'payroll',
+    abbr: 'ADP',
+    cardRationale: 'The enterprise payroll standard. For larger organizations, ADP\'s API enables the same payroll-to-journal-entry automation as Rippling, at scale.',
+    rationale: 'ADP remains the payroll provider for a significant share of mid-market and enterprise finance teams. Its API provides access to payroll runs, deductions, department coding, and employee records — the raw materials for building automated journal entry workflows at close. If your team is still manually downloading and reformatting ADP exports, that\'s a strong candidate for automation.',
+    heard: null,
+    useCases: [
+      'Payroll journal entry automation at close',
+      'Headcount reporting for budget vs. actuals',
+      'Benefit accrual calculations',
+      'Workforce cost allocation by department',
+    ],
+    connects: ['NetSuite', 'Sage Intacct', 'Snowflake', 'Python'],
+    connectsFeatured: ['NetSuite'],
+    complexity: 3,
+    complexityLabel: 'Moderate-high — enterprise API; requires partner credentials'
+  },
+
+  // BANKING & AP
+  {
+    id: 'ramp',
+    name: 'Ramp',
+    tagline: 'Ramp Finance Automation API',
+    category: 'banking',
+    abbr: 'RM',
+    cardRationale: 'The spend management platform that accounting teams actually enjoy. Ramp\'s API enables real-time expense data pulls, credit card accrual automation, and sync into your ERP — one of the highest-frequency data flows in close.',
+    rationale: 'Ramp is the spend management layer that sits between your cards and your ERP. At month-end, the credit card accrual is one of the messiest manual processes in close — pulling pending transactions, mapping them to departments, and creating journal entries for spend that hasn\'t synced yet. Kenny walked through this exact use case: download pending Ramp transactions, throw the CSV into Claude, auto-generate accrual entries. The API makes this repeatable and auditable.',
+    heard: '"Every month we actually have to do a credit card accrual. All this spend got spent on credit cards, but they haven\'t submitted the receipts yet. So you could literally just go in, download all those transactions... and then say, hey, give me the journal entries that I need in order to basically upload into our system."',
+    heardAttr: '— Kenny Kha, Accounting Engineer, Abridge',
+    useCases: [
+      'Real-time expense transaction sync to ERP',
+      'Month-end credit card accrual automation',
+      'Vendor spend analytics by department',
+      'Receipt matching and close reconciliation',
+    ],
+    connects: ['NetSuite', 'QuickBooks', 'Snowflake', 'Python', 'Numeric'],
+    connectsFeatured: ['NetSuite', 'Numeric'],
+    complexity: 1,
+    complexityLabel: 'Low — modern REST API, developer-friendly'
+  },
+  {
+    id: 'brex',
+    name: 'Brex',
+    tagline: 'Brex Programmatic Finance API',
+    category: 'banking',
+    abbr: 'BX',
+    cardRationale: 'The startup-native alternative to Ramp. Similar close automation use cases — the choice between the two often comes down to your banking relationship and ERP integrations.',
+    rationale: 'Brex competes directly with Ramp in the spend management category and offers comparable API capabilities for expense automation, card management, and ERP sync. The close-relevant use case is identical: pull transaction data, map to GL codes, generate journal entries. The differentiation lies in your banking setup and which native ERP integration is better maintained for your specific system.',
+    heard: null,
+    useCases: [
+      'Month-end expense accruals',
+      'Corporate card transaction sync to ERP',
+      'Real-time spend visibility for department heads',
+    ],
+    connects: ['NetSuite', 'QuickBooks', 'Snowflake'],
+    connectsFeatured: ['NetSuite'],
+    complexity: 1,
+    complexityLabel: 'Low — modern REST, good documentation'
+  },
+
+  // AI & AUTOMATION
+  {
+    id: 'claude',
+    name: 'Claude / Anthropic',
+    tagline: 'Anthropic Messages API',
+    category: 'ai',
+    abbr: 'AI',
+    cardRationale: 'The LLM your team is already using for CSV transformations, journal entry drafting, and document analysis. Building API access enables repeatable, auditable workflows — not just one-off prompts.',
+    rationale: 'Your team is already using Claude through the chat interface for ad-hoc tasks — messy CSV cleanup, journal entry generation, policy interpretation. The API moves that from one-off prompts to repeatable, version-controlled workflows. The key distinction practitioners draw: using Claude Code to build an automation is fine; not knowing what it built is the risk. API access enables systematic use of AI in close workflows with auditability baked in.',
+    heard: null,
+    useCases: [
+      'CSV-to-journal-entry transformation pipeline',
+      'GL account coding suggestions for new transactions',
+      'Policy document Q&A for audit prep',
+      'Anomaly narrative drafting for variance analysis',
+    ],
+    connects: ['Python', 'GitHub', 'NetSuite', 'Snowflake'],
+    connectsFeatured: ['Python', 'GitHub'],
+    complexity: 1,
+    complexityLabel: 'Low — excellent documentation, Python SDK'
+  },
+  {
+    id: 'alteryx',
+    name: 'Alteryx',
+    tagline: 'Alteryx Server API & Gallery API',
+    category: 'ai',
+    abbr: 'AX',
+    cardRationale: 'The visual workflow tool that introduced many accountants to automation. Still relevant for teams that want to build data pipelines without writing code from scratch.',
+    rationale: 'Alteryx was the "gateway drug" for accounting automation before LLMs lowered the barrier to code. Its visual, node-based interface lets non-engineers build sophisticated data workflows — transformations, joins, formula logic — without Python. Kenny and Francisco both cited it as the starting point for their automation journey. Even as LLMs gain capability, Alteryx remains valuable for teams with complex, multi-step data prep that benefits from a visual representation.',
+    heard: '"The reason why Alteryx is such a great entry starting point is because it\'s not necessarily coding something, it\'s a visual workflow builder... once you see the power of being able to repetitively run that same workflow, you\'re like, okay, this could actually save a lot of time."',
+    heardAttr: '— Kenny Kha, Accounting Engineer, Abridge',
+    useCases: [
+      'Multi-step data transformations without Python',
+      'Reconciliation prep from multi-source exports',
+      'Financial report formatting automation',
+      'Training accountants to think in workflows',
+    ],
+    connects: ['NetSuite', 'Snowflake', 'Python'],
+    connectsFeatured: [],
+    complexity: 2,
+    complexityLabel: 'Moderate — API is server-side; core value is the UI'
+  },
+  {
+    id: 'python',
+    name: 'Python (+ Libraries)',
+    tagline: 'pandas, SQLAlchemy, requests',
+    category: 'ai',
+    abbr: 'PY',
+    cardRationale: 'Not an API itself — but the glue layer that connects every API on this list. If your team wants to build durable automations, Python proficiency (or access to Claude Code) is the foundation.',
+    rationale: 'Python is the connective tissue between every other API in this library. NetSuite connector? Python. Snowflake pipeline? Python. Payroll-to-journal-entry transformer? Python. With Claude Code and Cursor, accountants without deep engineering backgrounds can now prompt their way to working Python scripts — but the practitioners who thrive are those who understand enough to review what was built. You don\'t need to write it from scratch; you need to know if it\'s right.',
+    heard: 'Francisco described helping a non-technical colleague set up her first Python integration: "I was like, get a super basic Python course that\'s free in Udacity. And then let\'s go through each one of the steps. And now she\'s like, with Cloud Code, she can debug herself or do small changes."',
+    heardAttr: '— Francisco Meyo, Controller, Abridge',
+    useCases: [
+      'ERP-to-warehouse data pipelines',
+      'CSV transformation and journal entry generation',
+      'API orchestration across multiple systems',
+      'Automation scripts version-controlled in GitHub',
+    ],
+    connects: ['NetSuite', 'Snowflake', 'Rippling', 'Ramp', 'GitHub', 'Claude'],
+    connectsFeatured: ['GitHub', 'Claude'],
+    complexity: 2,
+    complexityLabel: 'Moderate — low floor, very high ceiling'
+  },
+];
+
+const grid = document.getElementById('grid');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalClose = document.getElementById('modal-close');
+const searchInput = document.getElementById('search');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const visibleCount = document.getElementById('visible-count');
+const emptyState = document.getElementById('empty-state');
+
+const CAT_LABELS = {
+  erp: 'ERP', data: 'Data & BI', workflow: 'Workflow',
+  payroll: 'Payroll & HR', banking: 'Banking & AP', ai: 'AI & Automation'
+};
+
+function renderCards() {
+  grid.innerHTML = '';
+  const q = searchInput.value.toLowerCase();
+  const activeCat = document.querySelector('.filter-btn.active').dataset.cat;
+
+  let shown = 0;
+  APIS.forEach(api => {
+    const matchCat = activeCat === 'all' || api.category === activeCat;
+    const matchSearch = !q || api.name.toLowerCase().includes(q) || api.tagline.toLowerCase().includes(q) || api.cardRationale.toLowerCase().includes(q);
+    if (!matchCat || !matchSearch) return;
+
+    shown++;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-logo">${api.abbr}</div>
+        <div class="card-category-tag cat-${api.category}">${CAT_LABELS[api.category]}</div>
+      </div>
+      <h3>${api.name}</h3>
+      <div class="card-subtitle">${api.tagline}</div>
+      <div class="card-rationale">${api.cardRationale}</div>
+      <div class="card-footer">
+        <div class="card-connects">Connects: ${api.connects.slice(0,3).join(', ')}${api.connects.length > 3 ? ' +' + (api.connects.length - 3) : ''}</div>
+        <div class="card-cta">Details</div>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(api));
+    grid.appendChild(card);
+  });
+
+  visibleCount.textContent = shown;
+  emptyState.classList.toggle('visible', shown === 0);
+}
+
+function openModal(api) {
+  document.getElementById('m-cat-tag').textContent = CAT_LABELS[api.category];
+  document.getElementById('m-cat-tag').className = `modal-cat-tag cat-${api.category}`;
+  document.getElementById('m-name').textContent = api.name;
+  document.getElementById('m-tagline').textContent = api.tagline;
+  document.getElementById('m-rationale').textContent = api.rationale;
+
+  const heardWrap = document.getElementById('m-heard-wrap');
+  if (api.heard) {
+    heardWrap.style.display = '';
+    document.getElementById('m-heard').innerHTML = `${api.heard}<div class="heard-from-attr">${api.heardAttr}</div>`;
+  } else {
+    heardWrap.style.display = 'none';
+  }
+
+  const useCasesEl = document.getElementById('m-use-cases');
+  useCasesEl.innerHTML = api.useCases.map(uc => `
+    <div class="use-case"><span class="use-case-icon">›</span><span>${uc}</span></div>
+  `).join('');
+
+  const connectsEl = document.getElementById('m-connects');
+  connectsEl.innerHTML = api.connects.map(c =>
+    `<div class="connect-pill ${api.connectsFeatured.includes(c) ? 'featured' : ''}">${c}</div>`
+  ).join('');
+
+  const complexityEl = document.getElementById('m-complexity');
+  const pips = [1,2,3,4,5].map(i =>
+    `<div class="complexity-pip ${i <= api.complexity ? 'filled' : ''}"></div>`
+  ).join('');
+  complexityEl.innerHTML = pips + `<span class="complexity-label">${api.complexityLabel}</span>`;
+
+  modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards();
+  });
+});
+
+searchInput.addEventListener('input', renderCards);
+
+renderCards();
+</script>
+</body>
+</html>
