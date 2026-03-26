@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numeric CTA — Option A Variants</title>
+  <style>
+    body {
+      background: #fff;
+      margin: 0;
+      padding: 3rem 2rem;
+      font-family: "Booton", "Helvetica Neue", sans-serif;
+    }
+    .page-wrap { max-width: 680px; margin: 0 auto; }
+
+    .article-text {
+      font-size: 17px;
+      line-height: 1.7;
+      color: #1a1a1a;
+      margin: 0 0 2rem;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin: 0 0 10px;
+    }
+
+    /* shared dot styles */
+    .dot-br {
+      position: absolute;
+      right: -10px; bottom: -10px;
+      width: 220px; height: 220px;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.42) 1.5px, transparent 1.5px);
+      background-size: 9px 9px;
+      border-radius: 999px;
+      mask-image: radial-gradient(ellipse 80% 80% at 75% 75%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 75% 75%, black 30%, transparent 100%);
+    }
+    .dot-tl {
+      position: absolute;
+      left: -10px; top: -10px;
+      width: 130px; height: 130px;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.28) 1.5px, transparent 1.5px);
+      background-size: 9px 9px;
+      border-radius: 999px;
+      mask-image: radial-gradient(ellipse 80% 80% at 25% 25%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 25% 25%, black 30%, transparent 100%);
+    }
+    .dot-tr {
+      position: absolute;
+      right: -10px; top: -10px;
+      width: 180px; height: 140px;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.38) 1.5px, transparent 1.5px);
+      background-size: 9px 9px;
+      mask-image: radial-gradient(ellipse 85% 85% at 85% 15%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 85% 15%, black 30%, transparent 100%);
+    }
+    .dot-bl {
+      position: absolute;
+      left: -10px; bottom: -10px;
+      width: 160px; height: 160px;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.28) 1.5px, transparent 1.5px);
+      background-size: 9px 9px;
+      mask-image: radial-gradient(ellipse 80% 80% at 20% 80%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 20% 80%, black 30%, transparent 100%);
+    }
+
+    /* shared elements */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(233,235,214,0.85);
+      margin: 0 0 10px;
+      position: relative; z-index: 1;
+    }
+    .btn-dark {
+      display: inline-block;
+      background: #080707;
+      color: #fff;
+      text-decoration: none;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-family: "Booton", "Helvetica Neue", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      white-space: nowrap;
+      position: relative; z-index: 1;
+    }
+    .btn-white {
+      display: inline-block;
+      background: #fff;
+      color: #7036FF;
+      text-decoration: none;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-family: "Booton", "Helvetica Neue", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      white-space: nowrap;
+      position: relative; z-index: 1;
+    }
+
+    /* ── A1: Stacked — headline left-aligned, button below ── */
+    .cta-a1 {
+      background: #7036FF;
+      border-radius: 16px;
+      padding: 2.25rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    .cta-a1 .headline {
+      font-family: "Arizona Flare", Georgia, serif;
+      font-weight: 300;
+      font-size: 24px;
+      color: #fff;
+      margin: 0 0 1.5rem;
+      line-height: 1.3;
+      position: relative; z-index: 1;
+      max-width: 420px;
+    }
+
+    /* ── A2: Horizontal — text left, button right ── */
+    .cta-a2 {
+      background: #7036FF;
+      border-radius: 16px;
+      padding: 1.75rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .cta-a2 .body { flex: 1; z-index: 1; position: relative; }
+    .cta-a2 .headline {
+      font-family: "Arizona Flare", Georgia, serif;
+      font-weight: 300;
+      font-size: 20px;
+      color: #fff;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    /* ── A3: Stat anchor — big number + headline ── */
+    .cta-a3 {
+      background: #7036FF;
+      border-radius: 16px;
+      padding: 2.25rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .cta-a3 .stat-block {
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      padding-right: 2.5rem;
+    }
+    .cta-a3 .stat-num {
+      font-family: "Arizona Flare", Georgia, serif;
+      font-weight: 300;
+      font-size: 48px;
+      color: #fff;
+      line-height: 1;
+      margin: 0;
+    }
+    .cta-a3 .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      margin: 4px 0 0;
+    }
+    .cta-a3 .body { flex: 1; z-index: 1; position: relative; }
+    .cta-a3 .headline {
+      font-family: "Arizona Flare", Georgia, serif;
+      font-weight: 300;
+      font-size: 19px;
+      color: #fff;
+      margin: 0 0 1rem;
+      line-height: 1.35;
+    }
+
+    /* ── A4: Centered — dramatic, section-break style ── */
+    .cta-a4 {
+      background: #7036FF;
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .cta-a4 .headline {
+      font-family: "Arizona Flare", Georgia, serif;
+      font-weight: 300;
+      font-size: 26px;
+      color: #fff;
+      margin: 0 auto 1.5rem;
+      line-height: 1.3;
+      max-width: 460px;
+      position: relative; z-index: 1;
+    }
+    .cta-a4 .sub {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin: -0.75rem auto 1.5rem;
+      max-width: 380px;
+      position: relative; z-index: 1;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <p class="article-text">Manual cash flow processes create blind spots that put companies at risk. Here's what modern teams do differently.</p>
+
+  <!-- A1: Stacked -->
+  <p class="label">A1 — Stacked, left-aligned</p>
+  <div class="cta-a1">
+    <div class="dot-tr"></div>
+    <div class="dot-bl"></div>
+    <p class="eyebrow">See Numeric in action</p>
+    <p class="headline">Stop forecasting from spreadsheets. Get real-time cash visibility.</p>
+    <a href="#" class="btn-dark">Schedule a demo</a>
+  </div>
+
+  <p class="article-text">Real-time data gives finance teams the confidence to act on what they see, not what they hope is still true.</p>
+
+  <!-- A2: Horizontal -->
+  <p class="label">A2 — Horizontal, compact</p>
+  <div class="cta-a2">
+    <div class="dot-tr"></div>
+    <div class="cta-a2 body" style="all:unset; flex:1; z-index:1; position:relative;">
+      <p class="eyebrow" style="margin-bottom:8px;">See Numeric in action</p>
+      <p style="font-family:'Arizona Flare',Georgia,serif;font-weight:300;font-size:20px;color:#fff;margin:0;line-height:1.3;">Stop forecasting from spreadsheets. Get real-time cash visibility.</p>
+    </div>
+    <a href="#" class="btn-dark">Schedule a demo</a>
+  </div>
+
+  <p class="article-text">The best forecasting teams build processes that surface risk before it becomes a problem.</p>
+
+  <!-- A3: Stat anchor -->
+  <p class="label">A3 — With stat anchor</p>
+  <div class="cta-a3">
+    <div class="dot-br"></div>
+    <div class="stat-block">
+      <p class="stat-num">1 day</p>
+      <p class="stat-label">to live cash forecast</p>
+    </div>
+    <div class="body">
+      <p class="headline">Connect your ERP and get a live cash forecast faster than you think.</p>
+      <a href="#" class="btn-dark">Schedule a demo</a>
+    </div>
+  </div>
+
+  <p class="article-text">Consistency and data quality will always be the deciding factors in whether your forecast holds up under scrutiny.</p>
+
+  <!-- A4: Centered -->
+  <p class="label">A4 — Centered, section-break style</p>
+  <div class="cta-a4">
+    <div class="dot-tr"></div>
+    <div class="dot-bl"></div>
+    <p class="eyebrow" style="position:relative;z-index:1;">See Numeric in action</p>
+    <p class="headline">Ready to replace your spreadsheet forecast with real-time data?</p>
+    <p class="sub">Controllers at companies like Canva and Ramp use Numeric to close faster and forecast with confidence.</p>
+    <a href="#" class="btn-dark" style="position:relative;z-index:1;">Schedule a demo</a>
+  </div>
+
+</div>
+</body>
+</html>
