@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f0f0f0;
+      padding: 60px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h3 {
+      font-family: Inter, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #999;
+      margin: 0 0 12px;
+    }
+    .spacer { margin-bottom: 48px; }
+
+    @keyframes drift {
+      0%   { transform: translateY(-50%) translateX(0) rotate(0deg); }
+      50%  { transform: translateY(-50%) translateX(-12px) rotate(4deg); }
+      100% { transform: translateY(-50%) translateX(0) rotate(0deg); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Option A: Purple + drifting dot cluster ── -->
+  <h3>Option A — Drifting dot cluster</h3>
+  <div class="spacer" style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    background:#7036FF;
+    padding:28px 36px;
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+    font-family:'Booton','Inter','Helvetica Neue',sans-serif;
+  ">
+    <div style="max-width:580px; z-index:2;">
+      <div style="font-size:18px; font-weight:500; line-height:1.4; color:#fff; letter-spacing:0;">
+        See how Controllers use Numeric for
+        <span style="font-weight:400;">real-time cash insights</span>
+      </div>
+    </div>
+    <a href="#" style="background:#080707;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-family:'Booton','Inter','Helvetica Neue',sans-serif;font-weight:500;font-size:14px;line-height:1;white-space:nowrap;flex-shrink:0;z-index:2;margin-right:60px;">Read more →</a>
+
+    <!-- Large slow-drifting dot field -->
+    <div style="
+      position:absolute; right:-40px; top:50%;
+      transform:translateY(-50%);
+      width:260px; height:260px;
+      animation: drift 8s ease-in-out infinite;
+      pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,0.55) 1.5px, transparent 1.5px);
+      background-size: 10px 10px;
+      border-radius:999px;
+      mask-image: radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%);
+    "></div>
+  </div>
+
+
+  <!-- ── Option B: Purple + lightest-green accent band ── -->
+  <h3>Option B — Green accent stripe</h3>
+  <div class="spacer" style="
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    background:#7036FF;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+    font-family:'Booton','Inter','Helvetica Neue',sans-serif;
+    min-height:88px;
+  ">
+    <!-- Green top stripe -->
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#E9EBD6;opacity:0.6;"></div>
+
+    <div style="flex:1; padding:28px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+      <div style="max-width:640px;">
+        <div style="font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:#E9EBD6; margin-bottom:8px;">Cash Management</div>
+        <div style="font-size:18px; font-weight:500; line-height:1.4; color:#fff;">
+          See how Controllers use Numeric for
+          <span style="font-weight:400; opacity:0.78;">real-time cash insights</span>
+        </div>
+      </div>
+      <a href="#" style="background:#080707;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-family:'Booton','Inter','Helvetica Neue',sans-serif;font-weight:500;font-size:14px;line-height:1;white-space:nowrap;flex-shrink:0;">Read more →</a>
+    </div>
+
+    <!-- Dot texture -->
+    <div style="
+      position:absolute; right:-28px; top:50%;
+      transform:translateY(-50%);
+      width:200px; height:200px;
+      opacity:0.15;
+      background-image: radial-gradient(rgba(233,235,214,0.8) 1.3px, transparent 1.3px);
+      background-size: 9px 9px;
+      border-radius:999px;
+      pointer-events:none;
+    "></div>
+  </div>
+
+
+  <!-- ── Option C: Purple + shimmer sweep ── -->
+  <h3>Option C — Shimmer sweep</h3>
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    background:#7036FF;
+    padding:28px 36px;
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+    font-family:'Booton','Inter','Helvetica Neue',sans-serif;
+  ">
+    <!-- Shimmer -->
+    <div style="
+      position:absolute; inset:0;
+      background: linear-gradient(110deg,
+        transparent 20%,
+        rgba(255,255,255,0.09) 45%,
+        rgba(255,255,255,0.13) 50%,
+        rgba(255,255,255,0.09) 55%,
+        transparent 80%
+      );
+      background-size: 700px 100%;
+      animation: shimmer 4s linear infinite;
+      pointer-events:none;
+    "></div>
+
+    <!-- Lightest-green glow top-right -->
+    <div style="
+      position:absolute; right:-40px; top:-40px;
+      width:200px; height:200px;
+      background:radial-gradient(circle, #E9EBD6 0%, transparent 70%);
+      opacity:0.15;
+      pointer-events:none;
+    "></div>
+    <!-- Dot texture bottom-right -->
+    <div style="
+      position:absolute; right:-20px; top:50%;
+      transform:translateY(-50%);
+      width:180px; height:180px;
+      opacity:0.18;
+      background-image: radial-gradient(rgba(255,255,255,0.6) 1.2px, transparent 1.2px);
+      background-size: 8px 8px;
+      border-radius:999px;
+      pointer-events:none;
+    "></div>
+
+    <div style="max-width:580px; z-index:2;">
+      <div style="font-size:18px; font-weight:500; line-height:1.4; color:#fff; letter-spacing:0;">
+        See how Controllers use Numeric for
+        <span style="font-weight:400; opacity:0.78;">real-time cash insights</span>
+      </div>
+    </div>
+    <a href="#" style="background:#080707;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-family:'Booton','Inter','Helvetica Neue',sans-serif;font-weight:500;font-size:14px;line-height:1;white-space:nowrap;flex-shrink:0;z-index:2;">Read more →</a>
+  </div>
+
+</body>
+</html>

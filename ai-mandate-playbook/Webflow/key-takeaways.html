@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Takeaways — Numeric</title>
+  <style>
+    :root {
+      --font-headline: "Arizona Flare", Georgia, serif;
+      --font-body: "Booton", "Helvetica Neue", sans-serif;
+      --color-dark: #080707;
+      --color-purple: #7036FF;
+      --color-bg: #e9ebd6;
+      --color-border: rgba(8, 7, 7, 0.18);
+    }
+
+    body {
+      background: #f5f4f0;
+      margin: 0;
+      padding: 3rem 2rem;
+      max-width: 760px;
+    }
+
+    .nt-wrap {
+      background: #FAF8F5;
+      border-radius: 1.25rem;
+      padding: 2.75rem 2.75rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nt-dot {
+      position: absolute;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(8,7,7,0.18) 1.5px, transparent 1.5px);
+      background-size: 9px 9px;
+    }
+    .nt-dot-tr {
+      top: -10px; right: -10px;
+      width: 200px; height: 160px;
+      mask-image: radial-gradient(ellipse 85% 85% at 85% 15%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 85% 15%, black 30%, transparent 100%);
+    }
+    .nt-dot-bl {
+      bottom: -10px; left: -10px;
+      width: 160px; height: 180px;
+      mask-image: radial-gradient(ellipse 85% 85% at 15% 85%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 15% 85%, black 30%, transparent 100%);
+    }
+    .nt-dot-bc {
+      bottom: -10px; left: 50%;
+      transform: translateX(-50%);
+      width: 110px; height: 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 100%, black 20%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 100%, black 20%, transparent 100%);
+    }
+
+    .nt-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nt-heading {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: 1.5rem;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: var(--color-dark);
+      margin: 0 0 1.75rem;
+    }
+
+    .nt-list {
+      padding: 0 !important;
+      margin: 0 !important;
+      list-style: none !important;
+    }
+
+    .nt-item {
+      display: flex !important;
+      gap: 1.25rem !important;
+      padding: 1.125rem 0 !important;
+      align-items: flex-start !important;
+      list-style: none !important;
+    }
+
+    .nt-item::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .nt-num {
+      font-family: "Arizona Flare", Georgia, serif !important;
+      font-weight: 300 !important;
+      font-size: 13px !important;
+      color: #080707 !important;
+      min-width: 22px !important;
+      padding-top: 2px !important;
+      flex-shrink: 0 !important;
+      letter-spacing: 0.02em !important;
+      line-height: 1.4 !important;
+    }
+
+    .nt-text {
+      font-family: "Booton", "Helvetica Neue", sans-serif !important;
+      font-weight: 400 !important;
+      font-size: 16px !important;
+      line-height: 1.4 !important;
+      color: #080707 !important;
+    }
+
+    .nt-bold { font-weight: 500 !important; }
+  </style>
+</head>
+<body>
+
+<div class="nt-wrap">
+
+  <div class="nt-dot nt-dot-tr"></div>
+  <div class="nt-dot nt-dot-bl"></div>
+  <div class="nt-dot nt-dot-bc"></div>
+
+  <div class="nt-content">
+    <p class="nt-heading">Key Takeaways</p>
+    <ul class="nt-list">
+      <li class="nt-item">
+        <span class="nt-num">01</span>
+        <span class="nt-text"><span class="nt-bold">Cash flow forecasting is a critical process for organizations of all sizes</span>, but those with multiple entities and accounts face particular challenges that only modern tools can address.</span>
+      </li>
+      <li class="nt-item">
+        <span class="nt-num">02</span>
+        <span class="nt-text"><span class="nt-bold">The best forecasting processes use multiple time horizons, direct and indirect forecasting, and various forecasting methods</span> to capture the most complete cash flow picture possible.</span>
+      </li>
+      <li class="nt-item">
+        <span class="nt-num">03</span>
+        <span class="nt-text"><span class="nt-bold">Manual data imports and spreadsheet-based processes diminish the timeliness and utility</span> of cash flow forecasts.</span>
+      </li>
+      <li class="nt-item">
+        <span class="nt-num">04</span>
+        <span class="nt-text"><span class="nt-bold">Hidden liquidity risks are almost impossible to detect</span> without a forecasting process built on real-time data.</span>
+      </li>
+      <li class="nt-item">
+        <span class="nt-num">05</span>
+        <span class="nt-text"><span class="nt-bold">Forecasts are only as good as their underlying data</span>, making modern data tools invaluable for teams who want to deliver high-quality forecasts.</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
